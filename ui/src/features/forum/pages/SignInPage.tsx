@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
+import { useNavigate, Link } from "react-router-dom"; // Import Link
 import useAuthStore from "../../auth/hooks/useAuthStore";
 import { signInMock } from "../../auth/api/authApi";
 
@@ -38,9 +38,7 @@ const SignInPage: React.FC = () => {
   return (
     <div className="flex justify-center items-center p-[var(--spacing-lg)]">
       <div className="bg-[color:var(--color-surface)] rounded-[var(--border-radius-md)] shadow-md p-[var(--spacing-lg)] w-full max-w-sm border border-[color:var(--color-border)]">
-        <h1 className="text-2xl font-bold mb-[var(--spacing-lg)] text-center">
-          Sign In
-        </h1>
+        {/* Removed Sign In Title */}
         <form onSubmit={handleSignIn}>
           <div className="mb-[var(--spacing-md)]">
             <label
@@ -54,7 +52,7 @@ const SignInPage: React.FC = () => {
               id="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="shadow-sm focus:ring-[color:var(--color-primary)] focus:border-[color:var(--color-primary)] block w-full sm:text-sm border-gray-300 rounded-[var(--border-radius-md)] p-2"
+              className="w-full" // Keep w-full, global styles add the rest
               required
             />
           </div>
@@ -70,7 +68,7 @@ const SignInPage: React.FC = () => {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="shadow-sm focus:ring-[color:var(--color-primary)] focus:border-[color:var(--color-primary)] block w-full sm:text-sm border-gray-300 rounded-[var(--border-radius-md)] p-2"
+              className="w-full" // Keep w-full, global styles add the rest
               required
             />
           </div>
@@ -81,14 +79,29 @@ const SignInPage: React.FC = () => {
             </p>
           )}
 
+          {/* Use the new default button class */}
           <button
             type="submit"
-            className="w-full bg-[color:var(--color-primary)] text-white py-2 px-4 rounded-[var(--border-radius-md)] hover:bg-[color:var(--color-primary-dark)] transition-colors font-semibold"
+            className="w-full btn btn-default"
             disabled={isSigningIn} // Disable button while signing in
           >
             {isSigningIn ? "Signing In..." : "Sign In"}
           </button>
         </form>
+
+        {/* Add OR separator and Sign Up link */}
+        <div className="flex items-center justify-center my-[var(--spacing-md)]">
+          <hr className="flex-grow border-gray-300" />
+          <span className="px-[var(--spacing-sm)] text-gray-500">OR</span>
+          <hr className="flex-grow border-gray-300" />
+        </div>
+
+        <Link
+          to="/signup"
+          className="w-full flex justify-center btn-text text-gray-600" // Styled as text button, grey color, centered
+        >
+          Sign Up
+        </Link>
       </div>
     </div>
   );

@@ -1,5 +1,3 @@
-// src/features/auth/hooks/useAuthStore.ts
-
 import { create } from "zustand";
 import type { IUser } from "../../forum/types/forumTypes"; // Import IUser
 

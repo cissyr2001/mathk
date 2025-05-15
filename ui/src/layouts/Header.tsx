@@ -1,32 +1,49 @@
-// src/layouts/Header.tsx
 import React from "react";
 import { Link } from "react-router-dom";
 import useAuthStore from "../features/auth/hooks/useAuthStore";
+import { FORUM_NAME } from "../config/appConfig"; // Import forum name
 
 const Header: React.FC = () => {
   const { user, signOut } = useAuthStore(); // Get user and signOut function from the store
 
   return (
-    <header className="bg-[color:var(--color-primary-dark)] text-white p-[var(--spacing-md)] shadow-md">
+    // Use the new header background color variable
+    <header className="bg-[color:var(--color-header-bg)] text-white p-[var(--spacing-md)] shadow-md">
       <div className="container mx-auto flex justify-between items-center">
+        {/* Text color handled by CSS rule on header */}
+        {/* Increase font size and use config name */}
         <Link
           to="/"
-          className="text-xl font-bold text-[color:var(--color-surface)] hover:text-gray-200 transition-colors"
+          className="text-3xl md:text-4xl font-bold hover:text-gray-200 transition-colors flex items-center gap-2" // Increased size, kept bold, added flex and gap
         >
-          Math Forum
-        </Link>{" "}
-        {/* Ensure white text */}
+          <span>🏠</span> {/* Add Home emoji */}
+          {FORUM_NAME}
+        </Link>
         <nav className="flex items-center">
           {/* Add navigation links here later */}
           {/* <Link to="/new-post" className="ml-4 hover:underline">New Post</Link> */}
 
+          {/* Search Button */}
+          <Link
+            to="/search"
+            className="ml-4 btn-text text-white text-base" // Use btn-text, white text, and base font size
+            aria-label="Search" // Add aria-label for accessibility
+          >
+            🔍
+          </Link>
+
           {/* Show user name or Sign In button */}
           {user ? (
-            <div className="flex items-center ml-4">
-              <span className="mr-2">Welcome, {user.username}!</span>
+            // Added gap for spacing
+            <div className="flex items-center ml-4 gap-[var(--spacing-sm)]">
+              {/* Circled avatar placeholder */}
+              <div className="avatar-circle"></div>
+              <span className="text-white text-base">{user.username}</span>{" "}
+              {/* Ensure username is white and base size */}
+              {/* Convert to text-based white button, set font size */}
               <button
                 onClick={signOut}
-                className="bg-red-500 text-white text-xs px-2 py-1 rounded hover:bg-red-600"
+                className="btn-text text-white text-base" // Use btn-text, white text, and base font size
               >
                 Sign Out
               </button>
@@ -34,7 +51,7 @@ const Header: React.FC = () => {
           ) : (
             <Link
               to="/signin"
-              className="ml-4 bg-[color:var(--color-secondary)] text-white py-1 px-3 rounded-[var(--border-radius-md)] hover:bg-[color:var(--color-secondary-dark)] transition-colors"
+              className="ml-4 btn-text text-white text-base" // Use btn-text, white text, and base font size
             >
               Sign In
             </Link>

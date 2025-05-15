@@ -1,4 +1,3 @@
-// src/features/forum/components/MessageContent/MessageContent.tsx
 import React, { useEffect, useRef } from "react";
 import katex from "katex"; // Import KaTeX library
 import "katex/dist/katex.min.css"; // Import KaTeX CSS

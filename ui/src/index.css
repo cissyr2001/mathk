@@ -1,3 +1,4 @@
+/* src/index.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,30 +7,52 @@
 :root {
   --color-primary: #3b82f6; /* Tailwind blue-500 */
   --color-primary-dark: #2563eb; /* Tailwind blue-600 */
-  --color-secondary: #10b981; /* Tailwind emerald-500 (Good button) */
+  --color-secondary: #10b981; /* Tailwind emerald-500 (Good button - replaced by primary/default) */
   --color-secondary-dark: #059669; /* Tailwind emerald-600 */
-  --color-danger: #ef4444; /* Tailwind red-500 (Bad button) */
+  --color-danger: #ef4444; /* Tailwind red-500 (Bad button - replaced by primary/default or specific danger style if needed later) */
   --color-danger-dark: #dc2626; /* Tailwind red-600 */
   --color-text-primary: #1f2937; /* Tailwind gray-800 */
   --color-text-secondary: #6b7280; /* Tailwind gray-500 */
   --color-background: #f9fafb; /* Tailwind gray-50 */
   --color-surface: #ffffff; /* Tailwind white */
   --color-border: #e5e7eb; /* Tailwind gray-200 */
+  --color-grey-dark: #4b5563; /* Tailwind gray-600 */
+  --color-grey-darker: #374151; /* Tailwind gray-700 */
+  /* Paler background for header */
+  --color-header-bg: #60a5fa; /* Tailwind blue-400 */
+
+  /* Spacing */
   --spacing-xs: 0.25rem; /* 4px */
   --spacing-sm: 0.5rem; /* 8px */
   --spacing-md: 1rem; /* 16px */
   --spacing-lg: 1.5rem; /* 24px */
-  --border-radius-md: 0.375rem; /* 6px */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Tailwind shadow-sm */
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
+  /* Increased button padding */
+  --spacing-button-x: var(--spacing-lg); /* Horizontal padding */
+  --spacing-button-y: var(--spacing-md); /* Vertical padding */
 
+  /* Estimate header height + some buffer for main content padding */
+  --spacing-header-padding-top: 4.5rem; /* Increased slightly for larger font */
+
+  /* Border Radius */
+  --border-radius-md: 0.375rem; /* 6px */
+  --border-radius-sm: 0.3em; /* For text buttons hover */
+  --border-radius-full: 9999px; /* Full circle for avatar */
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Tailwind shadow-sm */
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+  /* Fonts */
+  --font-family-primary: Georgia, "Times New Roman", Times, serif;
+}
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  /* Use the new primary font family */
+  font-family: var(--font-family-primary), -apple-system, BlinkMacSystemFont,
+    "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+    "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--color-background); /* Use CSS variable */
@@ -37,31 +60,155 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
 /* Basic styling for KaTeX rendering */
 .katex-display {
-    margin-top: var(--spacing-md);
-    margin-bottom: var(--spacing-md);
-    overflow-x: auto; /* Add horizontal scroll for large equations */
-    padding: var(--spacing-sm);
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius-md);
+  margin-top: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  overflow-x: auto; /* Add horizontal scroll for large equations */
+  padding: var(--spacing-sm);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
 }
 
 .katex {
-    font-size: 1.1em; /* Adjust font size if needed */
+  font-size: 1.1em; /* Adjust font size if needed */
 }
 
 /* Remove list discs */
 ul {
-    list-style: none;
-    padding: 0;
+  list-style: none;
+  padding: 0;
 }
 
 li {
-    list-style: none;
+  list-style: none;
 }
+
+/* Ensure header text and links are white */
+header,
+header a {
+  color: var(
+    --color-surface
+  ) !important; /* Use !important to override Tailwind defaults if necessary */
+  text-decoration: none !important; /* Remove underline for links */
+}
+
+/* Remove default underline from all links */
+a {
+  text-decoration: none;
+}
+
+/* --- Custom Styles --- */
+
+/* Fixed Header */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10; /* Ensure header is above content */
+  background-color: var(--color-header-bg); /* Use paler background */
+}
+
+/* Global input and textarea styles */
+input[type="text"],
+input[type="password"],
+textarea {
+  display: block;
+  width: 100%;
+  padding: var(--spacing-sm); /* Consistent padding */
+  border: 1px solid var(--color-border); /* Consistent border */
+  border-radius: var(--border-radius-md); /* Consistent border radius */
+  box-shadow: var(--shadow-sm); /* Consistent shadow */
+  /* Add focus styles here if needed, or rely on Tailwind utilities */
+  /* e.g., outline: none; border-color: var(--color-primary); */
+  font-family: inherit; /* Use theme font */
+  font-size: 0.875rem; /* text-sm for inputs */
+  color: var(--color-text-primary); /* Consistent text color */
+  background-color: var(--color-surface); /* White background */
+}
+
+/* Base button style */
+.btn {
+  display: inline-flex; /* Use flex for centering content if needed */
+  align-items: center;
+  justify-content: center;
+  /* Padding controlled by CSS variables, can be overridden */
+  padding: var(--spacing-button-y) var(--spacing-button-x);
+  border: none; /* No border */
+  border-radius: var(--border-radius-md);
+  font-weight: 600; /* Semibold */
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+  text-decoration: none; /* Remove underline for Link acting as button */
+  white-space: nowrap; /* Prevent text wrapping on buttons */
+  font-family: inherit; /* Button font follows the theme font */
+}
+
+/* Primary button style (Blue) */
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-surface); /* White text */
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-dark);
+}
+
+/* Default button style (Grey) */
+.btn-default {
+  background-color: var(--color-grey-dark); /* Darker grey background */
+  color: var(--color-surface); /* White text */
+}
+
+.btn-default:hover {
+  background-color: var(--color-grey-darker);
+}
+
+/* Small button style */
+.btn-sm {
+  /* Smaller padding for small buttons */
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 0.875rem; /* text-sm */
+}
+
+/* Text-only button style */
+.btn-text {
+  padding: var(--spacing-xs) var(--spacing-sm); /* Added padding for hover background */
+  margin: 0;
+  background: none; /* No background */
+  border: none; /* No border */
+  color: inherit; /* Inherit color from parent */
+  font-weight: inherit; /* Inherit font weight */
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out,
+    border-radius 0.15s ease-in-out; /* Add border-radius to transition */
+  text-decoration: none;
+  font-family: inherit; /* Ensure it uses theme font */
+}
+
+.btn-text:hover {
+  background-color: var(--color-border); /* Grey background on hover */
+  border-radius: var(--border-radius-sm); /* Rounded corners on hover */
+  opacity: 1; /* Ensure full opacity if it was changed */
+}
+
+/* Circled Avatar Placeholder */
+.avatar-circle {
+  display: inline-block;
+  width: 1.5rem; /* Adjust size as needed */
+  height: 1.5rem; /* Adjust size as needed */
+  background-color: var(--color-surface); /* White circle */
+  border-radius: var(--border-radius-full);
+  /* Removed margin-right, handled by flex gap */
+  /* Add flex/centering if you put content inside */
+  flex-shrink: 0; /* Prevent shrinking in flex container */
+}
+
+/* Reply/Post Order Number (Removed badge style) */
+/* The styling is handled by Tailwind classes directly where used */
