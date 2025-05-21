@@ -17,7 +17,9 @@ export const parseTextBlocks = (text: string): TextBlock[] => {
     let matchedPattern = null;
 
     // Find the earliest block start
-    for (const pattern of Object.values(TextBlockPresets)) {
+    for (const pattern of Object.values(TextBlockPresets).filter(
+      (x) => !!x.start
+    )) {
       const startIndex = remainingText.indexOf(pattern.start);
       if (startIndex !== -1 && startIndex < earliestStart) {
         earliestStart = startIndex;

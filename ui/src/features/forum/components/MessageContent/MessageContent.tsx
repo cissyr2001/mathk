@@ -5,11 +5,13 @@ import type { EditorMode } from "../../types/forumTypes";
 import useAuthStore from "../../../auth/hooks/useAuthStore";
 import { parseTextBlocks } from "./parseTextBlocks";
 import { renderAugmentedBlock } from "./renderAugmentedBlock";
+import { TextBlockPresets } from "./TextBlockPresets";
 
 interface MessageContentProps {
   content: string;
   mode: EditorMode;
 }
+
 const MessageContent: React.FC<MessageContentProps> = ({ content, mode }) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const { user } = useAuthStore();
@@ -18,14 +20,20 @@ const MessageContent: React.FC<MessageContentProps> = ({ content, mode }) => {
     if (contentRef.current) {
       contentRef.current.innerHTML = "";
 
-      if (mode === "plain") {
+      if (!content.trim()) {
+        contentRef.current.innerHTML =
+          '<p class="text-[color:var(--color-text-secondary)] italic">Type something to preview result here</p>';
+        return;
+      }
+
+      if (mode === TextBlockPresets.plain.mode) {
         const textContent = document.createTextNode(content);
         contentRef.current.appendChild(textContent);
         contentRef.current.innerHTML = contentRef.current.innerHTML.replace(
           /\n/g,
           "<br />"
         );
-      } else if (mode === "latex") {
+      } else if (mode === TextBlockPresets.latex.mode) {
         try {
           katex.render(content, contentRef.current, {
             throwOnError: false,
@@ -44,11 +52,11 @@ const MessageContent: React.FC<MessageContentProps> = ({ content, mode }) => {
           blockDiv.className = `text-block text-block-${block.type}`;
 
           switch (block.type) {
-            case "html":
+            case TextBlockPresets.html.mode:
               // Render HTML content (be cautious with raw HTML to prevent XSS)
               blockDiv.innerHTML = block.content;
               break;
-            case "latex":
+            case TextBlockPresets.latex.mode:
               try {
                 katex.render(block.content, blockDiv, {
                   throwOnError: false,
@@ -63,16 +71,15 @@ const MessageContent: React.FC<MessageContentProps> = ({ content, mode }) => {
                 blockDiv.innerHTML = `<span style="color: red;">Error rendering LaTeX: ${block.content}</span>`;
               }
               break;
-            case "plain":
+            case TextBlockPresets.plain.mode:
               blockDiv.appendChild(document.createTextNode(block.content));
               blockDiv.innerHTML = blockDiv.innerHTML.replace(/\n/g, "<br />");
               break;
-            case "markdown":
+            case TextBlockPresets.markdown.mode:
               blockDiv.appendChild(document.createTextNode(block.content));
               blockDiv.innerHTML = blockDiv.innerHTML.replace(/\n/g, "<br />");
               break;
-            case "embed":
-            case "augmented":
+            case TextBlockPresets.augmented.mode:
               blockDiv.appendChild(
                 renderAugmentedBlock({
                   content: block.content,

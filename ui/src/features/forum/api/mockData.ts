@@ -149,21 +149,20 @@ const initialMockThreads: IForumThread[] = [
     title: "Exploring Multiple Content Types in Mathematics",
     author: "MathGuru",
     content: `
-This thread showcases different content types for mathematical discussions.
+This thread showcases a variety of content types and mathematical expressions to enhance our forum discussions.
 
 --- START HTML BLOCK
 <h3>Quadratic Formula</h3>
 <p>Solve for x in ax<sup>2</sup> + bx + c = 0</p>
 --- CLOSE HTML BLOCK
 
-Here's some augmented script discussing calculus concepts like limits: The limit \`lim_(x->0) sin(x)/x = 1\` is fundamental.
+Here's an augmented script discussing calculus concepts: The limit \`lim_(x->0) sin(x)/x = 1\` is fundamental in calculus, often used in derivative definitions.
 
 --- START LATEX BLOCK
 \\int_{0}^{\\infty} e^{-x^2} \\, dx = \\frac{\\sqrt{\\pi}}{2}
 --- CLOSE LATEX BLOCK
 
-The Pythagorean theorem states that in a right triangle, \`a^2 + b^2 = c^2\`.
-This can be used to find the length of the hypotenuse.
+The Pythagorean theorem states that in a right triangle, \`a^2 + b^2 = c^2\`. This is useful for finding the hypotenuse length.
 
 --- START MARKDOWN BLOCK
 ## Geometric Series
@@ -174,7 +173,44 @@ The sum of an infinite geometric series is given by:
 \`\`\`
 --- CLOSE MARKDOWN BLOCK
 
-Let's discuss how these formats can enhance our forum!`,
+Let's explore matrix operations with this example: \`A = [[1, 2], [3, 4]]\`. The determinant is calculated as \`det(A) = ad - bc = 1*4 - 2*3 = -2\`.
+
+--- START HTML BLOCK
+<h4>Euler's Identity</h4>
+<p>The beautiful equation connecting e, i, π, 1, and 0:</p>
+--- CLOSE HTML BLOCK
+
+In augmented mode, consider the Fourier series: \`f(x) = a_0/2 + sum_(n=1)^oo (a_n cos(n pi x / L) + b_n sin(n pi x / L))\`.
+
+--- START LATEX BLOCK
+f(x) = \\sum_{n=1}^{\\infty} \\frac{1}{n^2} = \\frac{\\pi^2}{6}
+--- CLOSE LATEX BLOCK
+
+Probability concepts can be illustrated with: \`P(A uu B) = P(A) + P(B) - P(A nn B)\`.
+
+--- START MARKDOWN BLOCK
+## Binomial Theorem
+For any numbers x, y and non-negative integer n:
+
+\`\`\`math
+(x + y)^n = \\sum_{k=0}^{n} \\binom{n}{k} x^{n-k} y^k
+\`\`\`
+--- CLOSE MARKDOWN BLOCK
+
+Here's a step-by-step derivation with aligned equal signs for solving a quadratic equation \`x^2 - 5x + 6 = 0\` using the quadratic formula:
+
+--- START LATEX BLOCK
+\\begin{align*}
+x &= \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} \\\\
+  &= \\frac{-(-5) \\pm \\sqrt{(-5)^2 - 4 \\cdot 1 \\cdot 6}}{2 \\cdot 1} \\\\
+  &= \\frac{5 \\pm \\sqrt{25 - 24}}{2} \\\\
+  &= \\frac{5 \\pm \\sqrt{1}}{2} \\\\
+  &= \\frac{5 \\pm 1}{2}
+\\end{align*}
+--- CLOSE LATEX BLOCK
+
+This results in solutions \`x = 3\` or \`x = 2\`. Let's discuss how these formats enhance mathematical communication!
+`,
     replies: [],
     createdAt: subHours(new Date(), 1).toISOString(),
     repliesCount: 0,
