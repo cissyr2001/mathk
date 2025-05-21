@@ -1,115 +1,18 @@
 import React, { useEffect, useRef } from "react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
-import { parseAndConvertMath } from "../../../../utils/mathUtils";
 import type { EditorMode } from "../../types/forumTypes";
+import useAuthStore from "../../../auth/hooks/useAuthStore";
+import { parseTextBlocks } from "./parseTextBlocks";
+import { renderAugmentedBlock } from "./renderAugmentedBlock";
 
 interface MessageContentProps {
   content: string;
   mode: EditorMode;
 }
-
-interface TextBlock {
-  type: EditorMode;
-  content: string;
-}
-
 const MessageContent: React.FC<MessageContentProps> = ({ content, mode }) => {
   const contentRef = useRef<HTMLDivElement>(null);
-
-  // Function to parse content into text blocks
-  const parseTextBlocks = (text: string): TextBlock[] => {
-    const blocks: TextBlock[] = [];
-    const blockPatterns = [
-      {
-        type: "html" as EditorMode,
-        start: "--- START HTML BLOCK",
-        end: "--- CLOSE HTML BLOCK",
-      },
-      {
-        type: "latex" as EditorMode,
-        start: "--- START LATEX BLOCK",
-        end: "--- CLOSE LATEX BLOCK",
-      },
-      {
-        type: "plain" as EditorMode,
-        start: "--- START PLAIN TEXT BLOCK",
-        end: "--- CLOSE PLAIN TEXT BLOCK",
-      },
-      {
-        type: "markdown" as EditorMode,
-        start: "--- START MARKDOWN BLOCK",
-        end: "--- CLOSE MARKDOWN BLOCK",
-      },
-    ];
-
-    let remainingText = text;
-    let lastIndex = 0;
-
-    while (remainingText.length > 0) {
-      let foundBlock = false;
-      let earliestStart = remainingText.length;
-      let matchedPattern = null;
-
-      // Find the earliest block start
-      for (const pattern of blockPatterns) {
-        const startIndex = remainingText.indexOf(pattern.start);
-        if (startIndex !== -1 && startIndex < earliestStart) {
-          earliestStart = startIndex;
-          matchedPattern = pattern;
-        }
-      }
-
-      if (matchedPattern && earliestStart !== remainingText.length) {
-        // Add text before the block as Augmented Script
-        if (earliestStart > 0) {
-          blocks.push({
-            type: "augmented",
-            content: remainingText.substring(0, earliestStart),
-          });
-        }
-
-        // Find the end of the block
-        const startLength = matchedPattern.start.length;
-        const endIndex = remainingText.indexOf(
-          matchedPattern.end,
-          earliestStart + startLength
-        );
-
-        if (endIndex !== -1) {
-          const blockContent = remainingText.substring(
-            earliestStart + startLength,
-            endIndex
-          );
-          blocks.push({
-            type: matchedPattern.type,
-            content: blockContent.trim(),
-          });
-          remainingText = remainingText.substring(
-            endIndex + matchedPattern.end.length
-          );
-          lastIndex = 0;
-        } else {
-          // No end tag found, treat the rest as Augmented Script
-          blocks.push({
-            type: "augmented",
-            content: remainingText,
-          });
-          remainingText = "";
-        }
-        foundBlock = true;
-      } else {
-        // No more blocks found, treat the rest as Augmented Script
-        blocks.push({
-          type: "augmented",
-          content: remainingText,
-        });
-        remainingText = "";
-      }
-    }
-
-    return blocks;
-  };
+  const { user } = useAuthStore();
 
   useEffect(() => {
     if (contentRef.current) {
@@ -161,7 +64,6 @@ const MessageContent: React.FC<MessageContentProps> = ({ content, mode }) => {
               }
               break;
             case "plain":
-            case "augmented":
               blockDiv.appendChild(document.createTextNode(block.content));
               blockDiv.innerHTML = blockDiv.innerHTML.replace(/\n/g, "<br />");
               break;
@@ -170,42 +72,20 @@ const MessageContent: React.FC<MessageContentProps> = ({ content, mode }) => {
               blockDiv.innerHTML = blockDiv.innerHTML.replace(/\n/g, "<br />");
               break;
             case "embed":
-              parseAndConvertMath(block.content).forEach((segment) => {
-                if (typeof segment === "string") {
-                  const textNode = document.createTextNode(segment);
-                  blockDiv.appendChild(textNode);
-                  blockDiv.innerHTML = blockDiv.innerHTML.replace(
-                    /\n/g,
-                    "<br />"
-                  );
-                } else {
-                  const mathSpan = document.createElement("span");
-                  try {
-                    katex.render(segment.latex, mathSpan, {
-                      throwOnError: false,
-                      displayMode: false,
-                    });
-                    blockDiv.appendChild(mathSpan);
-                  } catch (error) {
-                    console.error(
-                      "Error rendering LaTeX from AsciiMath:",
-                      segment.latex,
-                      error
-                    );
-                    const errorSpan = document.createElement("span");
-                    errorSpan.style.color = "red";
-                    errorSpan.innerText = `[Math Error: ${segment.latex}]`;
-                    blockDiv.appendChild(errorSpan);
-                  }
-                }
-              });
+            case "augmented":
+              blockDiv.appendChild(
+                renderAugmentedBlock({
+                  content: block.content,
+                  currentUser: user,
+                })
+              );
               break;
           }
           contentRef.current?.appendChild(blockDiv);
         });
       }
     }
-  }, [content, mode]);
+  }, [content, mode, user]);
 
   return <div ref={contentRef} className="message-content"></div>;
 };
