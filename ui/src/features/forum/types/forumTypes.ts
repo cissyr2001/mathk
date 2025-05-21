@@ -33,7 +33,13 @@ export interface IForumThread extends IForumPost {
   badVotes: number;
 }
 
-export type EditorMode = "embed" | "plain" | "latex";
+export type EditorMode =
+  | "embed"
+  | "plain"
+  | "latex"
+  | "html"
+  | "augmented"
+  | "markdown";
 
 export interface ICreatePostPayload {
   title: string;

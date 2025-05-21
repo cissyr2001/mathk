@@ -64,21 +64,6 @@ code {
     monospace;
 }
 
-/* Basic styling for KaTeX rendering */
-.katex-display {
-  margin-top: var(--spacing-md);
-  margin-bottom: var(--spacing-md);
-  overflow-x: auto; /* Add horizontal scroll for large equations */
-  padding: var(--spacing-sm);
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-md);
-}
-
-.katex {
-  font-size: 1.1em; /* Adjust font size if needed */
-}
-
 /* Remove list discs */
 ul {
   list-style: none;

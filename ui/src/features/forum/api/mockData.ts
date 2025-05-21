@@ -114,7 +114,7 @@ const generateMockReply = (
     badVotes: Math.floor(Math.random() * 8),
     createdAt,
     threadId,
-    parentReplyId, // Include parentReplyId
+    parentReplyId,
   };
 };
 
@@ -146,15 +146,40 @@ const generateMockThread = (postData?: ICreatePostPayload): IForumThread => {
 const initialMockThreads: IForumThread[] = [
   {
     id: "1",
-    title: "Introduction to Calculus",
+    title: "Exploring Multiple Content Types in Mathematics",
     author: "MathGuru",
-    content:
-      "Discussing the fundamentals of calculus, including limits, derivatives, and integrals. Ask your basic questions here!\n\nFor example, what is the integral of `x^n`? It's `int x^n dx = x^(n+1)/(n+1) + C` (for `n != -1`). We can also look at related concepts like sequences and series. A common series is the geometric series: `sum_(n=0)^oo r^n = 1/(1-r)` for `|r| < 1`. This is a great example of an infinite sum converging to a finite value.",
+    content: `
+This thread showcases different content types for mathematical discussions.
+
+--- START HTML BLOCK
+<h3>Quadratic Formula</h3>
+<p>Solve for x in ax<sup>2</sup> + bx + c = 0</p>
+--- CLOSE HTML BLOCK
+
+Here's some augmented script discussing calculus concepts like limits: The limit \`lim_(x->0) sin(x)/x = 1\` is fundamental.
+
+--- START LATEX BLOCK
+\\int_{0}^{\\infty} e^{-x^2} \\, dx = \\frac{\\sqrt{\\pi}}{2}
+--- CLOSE LATEX BLOCK
+
+The Pythagorean theorem states that in a right triangle, \`a^2 + b^2 = c^2\`.
+This can be used to find the length of the hypotenuse.
+
+--- START MARKDOWN BLOCK
+## Geometric Series
+The sum of an infinite geometric series is given by:
+
+\`\`\`math
+\\sum_{n=0}^{\\infty} r^n = \\frac{1}{1-r}, \\quad |r| < 1
+\`\`\`
+--- CLOSE MARKDOWN BLOCK
+
+Let's discuss how these formats can enhance our forum!`,
     replies: [],
-    createdAt: subDays(new Date(), 3).toISOString(),
+    createdAt: subHours(new Date(), 1).toISOString(),
     repliesCount: 0,
-    goodVotes: 15,
-    badVotes: 1,
+    goodVotes: 20,
+    badVotes: 2,
   },
   {
     id: "2",
@@ -237,7 +262,7 @@ const initialMockReplies: IReply[] = [
     badVotes: 1,
     createdAt: subHours(new Date(), 1.5).toISOString(),
     threadId: "1",
-    parentReplyId: "r1_thread1", // Targeting r1_thread1
+    parentReplyId: "r1_thread1",
   },
   {
     id: "r3_thread2",
@@ -268,7 +293,7 @@ const initialMockReplies: IReply[] = [
     badVotes: 0,
     createdAt: subMinutes(new Date(), 5).toISOString(),
     threadId: "1",
-    parentReplyId: "r2_thread1", // Targeting r2_thread1
+    parentReplyId: "r2_thread1",
   },
   {
     id: "r6_thread1",
@@ -309,7 +334,7 @@ const initialMockReplies: IReply[] = [
     badVotes: 0,
     createdAt: subMinutes(new Date(), 3).toISOString(),
     threadId: "1",
-    parentReplyId: "r1_thread1", // Targeting r1_thread1
+    parentReplyId: "r1_thread1",
   },
 ];
 
@@ -319,7 +344,6 @@ const generatedReplies: IReply[] = Array.from({
 }).map(() => {
   const randomThread =
     allMockThreads[Math.floor(Math.random() * allMockThreads.length)];
-  // Randomly assign parentReplyId to some replies
   const threadReplies = initialMockReplies.filter(
     (r) => r.threadId === randomThread.id
   );
