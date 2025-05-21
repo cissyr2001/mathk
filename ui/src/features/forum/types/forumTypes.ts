@@ -4,52 +4,49 @@ export interface IUser {
   password?: string; // Password is optional as it shouldn't be sent to the frontend usually
 }
 
-// Renamed from ForumPost, replies changed to repliesCount
 export interface IForumPost {
   id: string;
   title: string;
   author: string;
-  repliesCount: number; // Renamed from 'replies'
+  repliesCount: number;
   createdAt: string; // ISO date string
-  // Add vote counts
   goodVotes: number;
   badVotes: number;
 }
 
-// Renamed from Reply
 export interface IReply {
   id: string;
   author: string;
   content: string;
-  votes?: number; // Simple combined vote count for now - Keeping for now, but adding specific votes below
+  votes?: number;
   threadId?: string;
   createdAt: string; // ISO date string
-  // Add good/bad votes
   goodVotes: number;
   badVotes: number;
+  parentReplyId?: string; // New field to track the target reply
 }
 
-// Renamed from ForumThread, extends IForumPost
 export interface IForumThread extends IForumPost {
-  content: string; // The main content of the initial post
-  replies: IReply[]; // For a specific thread, we fetch the actual replies (using the new IReply type)
-  // Include vote counts for the main post
+  content: string;
+  replies: IReply[];
   goodVotes: number;
   badVotes: number;
 }
 
-// Define type for text editor modes
 export type EditorMode = "embed" | "plain" | "latex";
 
-// Define payload types for API requests later
-// export interface ICreatePostPayload {
-//   title: string;
-//   content: string;
-//   mode: EditorMode;
-// }
+export interface ICreatePostPayload {
+  title: string;
+  content: string;
+  mode: EditorMode;
+  author: string;
+  tags?: string[];
+}
 
-// export interface ICreateReplyPayload {
-//    threadId: string;
-//    content: string;
-//    mode: EditorMode;
-// }
+export interface ICreateReplyPayload {
+  threadId: string;
+  content: string;
+  mode: EditorMode;
+  author: string;
+  parentReplyId?: string; // New field for creating replies targeting specific replies
+}

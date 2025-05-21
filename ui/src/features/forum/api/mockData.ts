@@ -1,14 +1,14 @@
-import { subDays, subHours, subMinutes } from "date-fns"; // For generating dates
-import { v4 as uuidv4 } from "uuid"; // Need a UUID generator for new mock data
-
+import { subDays, subHours, subMinutes } from "date-fns";
+import { v4 as uuidv4 } from "uuid";
 import type {
   IForumPost,
   IForumThread,
   IReply,
   IUser,
-} from "../types/forumTypes"; // Import IUser
+  ICreatePostPayload,
+  ICreateReplyPayload,
+} from "../types/forumTypes";
 
-// Sample Users with passwords
 export const mockUsers: IUser[] = [
   { id: "user1", username: "MathGuru", password: "password123" },
   { id: "user2", username: "AlgebraFan", password: "password456" },
@@ -16,12 +16,12 @@ export const mockUsers: IUser[] = [
   { id: "user4", username: "LimitLover", password: "securepassword" },
   { id: "user5", username: "MatrixMaster", password: "mysecret" },
   { id: "user6", username: "GeoGeek", password: "geometrypass" },
-  { id: "user7", username: "StatSage", password: "statistics" }, // Added user
-  { id: "user8", username: "LogicLover", password: "boolean" }, // Added user
-  { id: "user9", username: "PhysicsFan", password: "einstein" }, // Added user
-  { id: "user10", username: "ChemWhiz", password: "periodic" }, // Added user
-  { id: "user11", username: "BioStudent", password: "dna" }, // Added user
-  { id: "user12", username: "EcoAnalyst", password: "supplydemand" }, // Added user
+  { id: "user7", username: "StatSage", password: "statistics" },
+  { id: "user8", username: "LogicLover", password: "boolean" },
+  { id: "user9", username: "PhysicsFan", password: "einstein" },
+  { id: "user10", username: "ChemWhiz", password: "periodic" },
+  { id: "user11", username: "BioStudent", password: "dna" },
+  { id: "user12", username: "EcoAnalyst", password: "supplydemand" },
 ];
 
 const getRandomUser = () =>
@@ -51,16 +51,16 @@ const generateLoremMath = (sentences = 1) => {
     "`|vec(v)| = sqrt(v_x^2 + v_y^2 + v_z^2)`",
     "`phi = (1 + sqrt(5))/2`",
     "`[[cos(theta), -sin(theta)], [sin(theta), cos(theta)]]`",
-    "`p => q <=> !q or q`", // Corrected logical equivalence
+    "`p => q <=> !q or q`",
     "`sigma^2 = 1/N sum_(i=1)^N (x_i - bar(x))^2`",
-    "`oint_C vec(F) * d vec(r) = int int_S (nabla xx vec(F)) * d vec(S)`", // Stokes' Theorem
-    "`partial^2 f / partial x partial y = partial^2 f / partial y partial x`", // Clairaut's Theorem
-    "`prod_(i=1)^n a_i`", // Product notation
-    "`abs(x)`", // Absolute value
-    "`ceil(x)`", // Ceiling
-    "`floor(x)`", // Floor
-    "`vec(a) * (vec(b) xx vec(c))`", // Scalar triple product
-    "`A nn B = {x | x in A and x in B}`", // Set intersection definition
+    "`oint_C vec(F) * d vec(r) = int int_S (nabla xx vec(F)) * d vec(S)`",
+    "`partial^2 f / partial x partial y = partial^2 f / partial y partial x`",
+    "`prod_(i=1)^n a_i`",
+    "`abs(x)`",
+    "`ceil(x)`",
+    "`floor(x)`",
+    "`vec(a) * (vec(b) xx vec(c))`",
+    "`A nn B = {x | x in A and x in B}`",
   ];
   const textSnippets = [
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
@@ -78,14 +78,11 @@ const generateLoremMath = (sentences = 1) => {
   let content = "";
   for (let i = 0; i < sentences; i++) {
     content += textSnippets[Math.floor(Math.random() * textSnippets.length)];
-    // Occasionally insert a math example
     if (Math.random() > 0.4) {
-      // Increased chance of math
       content +=
         mathExamples[Math.floor(Math.random() * mathExamples.length)] + ". ";
     }
   }
-  // Ensure at least one math example if content is reasonably long and doesn't have one
   if (content.length > 80 && !content.includes("`")) {
     content +=
       " Consider the formula: " +
@@ -96,50 +93,56 @@ const generateLoremMath = (sentences = 1) => {
   return content.trim();
 };
 
-const generateMockReply = (threadId: string): IReply => {
+const generateMockReply = (
+  threadId: string,
+  content?: string,
+  mode?: string,
+  parentReplyId?: string
+): IReply => {
   const id = uuidv4();
   const author = getRandomUser().username;
-  const content = generateLoremMath(Math.random() > 0.3 ? 2 : 1); // 1 or 2 sentences, slightly higher chance of 2
-  const createdAt = generateRandomDate(48); // Replies are usually more recent, max 2 days old
+  const replyContent =
+    content || generateLoremMath(Math.random() > 0.3 ? 2 : 1);
+  const createdAt = generateRandomDate(48);
 
   return {
     id,
     author,
-    content,
-    votes: 0, // Simple votes, not used in UI currently
-    goodVotes: Math.floor(Math.random() * 30), // Increased max votes
-    badVotes: Math.floor(Math.random() * 8), // Increased max votes
+    content: replyContent,
+    votes: 0,
+    goodVotes: Math.floor(Math.random() * 30),
+    badVotes: Math.floor(Math.random() * 8),
     createdAt,
-    threadId, // Add threadId to reply
+    threadId,
+    parentReplyId, // Include parentReplyId
   };
 };
 
-const generateMockThread = (): IForumThread => {
+const generateMockThread = (postData?: ICreatePostPayload): IForumThread => {
   const id = uuidv4();
-  const author = getRandomUser().username;
-  const title = `Thread ${uuidv4().slice(0, 4)}: ${generateLoremMath(1)
-    .slice(0, 60)
-    .replace(/\.$/, "")}...`; // Generate title from first sentence of lorem math, max 60 chars
-  const content = generateLoremMath(Math.random() > 0.2 ? 5 : 3); // 3 to 5 sentences, higher chance of more
-  const createdAt = generateRandomDate(60 * 24); // Threads can be older, max 60 days old
-
-  // Replies will be generated and associated separately
-  const repliesCount = Math.floor(Math.random() * 25); // Up to 25 replies per generated thread
+  const author = postData?.author || getRandomUser().username;
+  const title =
+    postData?.title ||
+    `Thread ${uuidv4().slice(0, 4)}: ${generateLoremMath(1)
+      .slice(0, 60)
+      .replace(/\.$/, "")}...`;
+  const content =
+    postData?.content || generateLoremMath(Math.random() > 0.2 ? 5 : 3);
+  const createdAt = generateRandomDate(60 * 24);
 
   return {
     id,
     title,
     author,
     content,
-    replies: [], // replies are stored in allMockReplies
+    replies: [],
     createdAt,
-    repliesCount: repliesCount, // Store the generated count
-    goodVotes: Math.floor(Math.random() * 100), // Increased max votes
-    badVotes: Math.floor(Math.random() * 20), // Increased max votes
+    repliesCount: 0,
+    goodVotes: Math.floor(Math.random() * 100),
+    badVotes: Math.floor(Math.random() * 20),
   };
 };
 
-// Initial hand-crafted mock data (keep a few specific ones)
 const initialMockThreads: IForumThread[] = [
   {
     id: "1",
@@ -147,9 +150,9 @@ const initialMockThreads: IForumThread[] = [
     author: "MathGuru",
     content:
       "Discussing the fundamentals of calculus, including limits, derivatives, and integrals. Ask your basic questions here!\n\nFor example, what is the integral of `x^n`? It's `int x^n dx = x^(n+1)/(n+1) + C` (for `n != -1`). We can also look at related concepts like sequences and series. A common series is the geometric series: `sum_(n=0)^oo r^n = 1/(1-r)` for `|r| < 1`. This is a great example of an infinite sum converging to a finite value.",
-    replies: [], // replies are stored in allMockReplies
-    createdAt: subDays(new Date(), 3).toISOString(), // 3 days ago
-    repliesCount: 0, // Will be updated later
+    replies: [],
+    createdAt: subDays(new Date(), 3).toISOString(),
+    repliesCount: 0,
     goodVotes: 15,
     badVotes: 1,
   },
@@ -160,8 +163,8 @@ const initialMockThreads: IForumThread[] = [
     content:
       "A place to discuss basic concepts in linear algebra, such as vectors, matrices, and linear transformations.\n\nIf `v = [[v_1], [v_2]]` and `w = [[w_1], [w_2]]`, their dot product is `v * w = v_1 w_1 + v_2 w_2`. How do we represent transformations? A linear transformation T can often be represented by a matrix A such that `T(vec(x)) = A vec(x)`. For example, a rotation matrix might be `R(theta) = [[cos(theta), -sin(theta)], [sin(theta), cos(theta)]]`.",
     replies: [],
-    createdAt: subDays(new Date(), 2).toISOString(), // 2 days ago
-    repliesCount: 0, // Will be updated later
+    createdAt: subDays(new Date(), 2).toISOString(),
+    repliesCount: 0,
     goodVotes: 12,
     badVotes: 0,
   },
@@ -172,8 +175,8 @@ const initialMockThreads: IForumThread[] = [
     content:
       "Share interesting geometric problems or concepts! Like the Pythagorean theorem: `a^2 + b^2 = c^2`. What about areas and volumes? The area of a circle is `A = pi r^2`, and the volume of a sphere is `V = 4/3 pi r^3`. We can use integrals to derive these formulas, for instance, the area of a circle can be found using `int_0^(2pi) int_0^r rho d rho d theta`.",
     replies: [],
-    createdAt: subDays(new Date(), 1).toISOString(), // 1 day ago
-    repliesCount: 0, // Will be updated later
+    createdAt: subDays(new Date(), 1).toISOString(),
+    repliesCount: 0,
     goodVotes: 8,
     badVotes: 0,
   },
@@ -184,8 +187,8 @@ const initialMockThreads: IForumThread[] = [
     content:
       "Let's discuss basic probability and statistics. What's the difference between mean, median, and mode? The mean of a dataset `{x_1, x_2, ..., x_n}` is `bar(x) = (sum_(i=1)^n x_i)/n`. We can also talk about concepts like variance `sigma^2` and standard deviation `sigma`. The binomial probability formula is `P(X=k) = C(n, k) p^k (1-p)^(n-k)`.",
     replies: [],
-    createdAt: subHours(new Date(), 10).toISOString(), // 10 hours ago
-    repliesCount: 0, // Will be updated later
+    createdAt: subHours(new Date(), 10).toISOString(),
+    repliesCount: 0,
     goodVotes: 10,
     badVotes: 0,
   },
@@ -196,38 +199,24 @@ const initialMockThreads: IForumThread[] = [
     content:
       "Exploring fundamental concepts in mathematical logic. We can discuss truth tables, connectives (`and`, `or`, `not`, `=>`, `iff`), and quantifiers (`forall`, `exists`). A simple tautology is `p or !p`. A common logical equivalence is De Morgan's Law: `!(p and q) <=> !p or !q`. This is a great place to practice writing logical expressions.",
     replies: [],
-    createdAt: subHours(new Date(), 5).toISOString(), // 5 hours ago
-    repliesCount: 0, // Will be updated later
+    createdAt: subHours(new Date(), 5).toISOString(),
+    repliesCount: 0,
     goodVotes: 7,
     badVotes: 0,
   },
 ];
 
-// Generate 20 additional threads
 const additionalMockThreads: IForumThread[] = Array.from({ length: 20 }).map(
   () => generateMockThread()
 );
 
-// Combine initial and additional threads
 export const allMockThreads: IForumThread[] = [
   ...initialMockThreads,
   ...additionalMockThreads,
 ].sort(
   (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-); // Sort threads by creation date (newest first)
+);
 
-// Generate 30 additional replies + initial replies (9 total)
-const totalAdditionalRepliesNeeded = 30 - 9; // 30 more than the initial hand-coded ones
-const generatedReplies: IReply[] = Array.from({
-  length: totalAdditionalRepliesNeeded,
-}).map(() => {
-  // Assign these replies to any of the mock threads (initial or additional)
-  const randomThread =
-    allMockThreads[Math.floor(Math.random() * allMockThreads.length)];
-  return generateMockReply(randomThread.id);
-});
-
-// Hand-coded initial replies with threadId
 const initialMockReplies: IReply[] = [
   {
     id: "r1_thread1",
@@ -248,6 +237,7 @@ const initialMockReplies: IReply[] = [
     badVotes: 1,
     createdAt: subHours(new Date(), 1.5).toISOString(),
     threadId: "1",
+    parentReplyId: "r1_thread1", // Targeting r1_thread1
   },
   {
     id: "r3_thread2",
@@ -278,6 +268,7 @@ const initialMockReplies: IReply[] = [
     badVotes: 0,
     createdAt: subMinutes(new Date(), 5).toISOString(),
     threadId: "1",
+    parentReplyId: "r2_thread1", // Targeting r2_thread1
   },
   {
     id: "r6_thread1",
@@ -318,24 +309,45 @@ const initialMockReplies: IReply[] = [
     badVotes: 0,
     createdAt: subMinutes(new Date(), 3).toISOString(),
     threadId: "1",
+    parentReplyId: "r1_thread1", // Targeting r1_thread1
   },
 ];
+
+const totalAdditionalRepliesNeeded = 30 - 9;
+const generatedReplies: IReply[] = Array.from({
+  length: totalAdditionalRepliesNeeded,
+}).map(() => {
+  const randomThread =
+    allMockThreads[Math.floor(Math.random() * allMockThreads.length)];
+  // Randomly assign parentReplyId to some replies
+  const threadReplies = initialMockReplies.filter(
+    (r) => r.threadId === randomThread.id
+  );
+  const parentReplyId =
+    Math.random() > 0.7 && threadReplies.length > 0
+      ? threadReplies[Math.floor(Math.random() * threadReplies.length)].id
+      : undefined;
+  return generateMockReply(
+    randomThread.id,
+    undefined,
+    undefined,
+    parentReplyId
+  );
+});
 
 export const allMockReplies: IReply[] = [
   ...initialMockReplies,
   ...generatedReplies,
 ].sort(
   (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-); // Sort replies by date (oldest first)
+);
 
-// Update repliesCount for all threads based on the combined reply list
 allMockThreads.forEach((thread) => {
   thread.repliesCount = allMockReplies.filter(
     (reply) => reply.threadId === thread.id
   ).length;
 });
 
-// Mock function to get a list of posts for the homepage with pagination
 export const getMockPosts = (
   page: number,
   pageSize: number
@@ -360,14 +372,10 @@ export const getMockPosts = (
   };
 };
 
-// Mock function to get a specific thread (without replies)
 export const getMockThread = (threadId: string): IForumThread | undefined => {
-  // Find the thread details, but don't include the full replies array here
   const thread = allMockThreads.find((thread) => thread.id === threadId);
   if (!thread) return undefined;
 
-  // Return thread details without the replies array
-  // Create a shallow copy to ensure 'replies' is not present
   const threadDetails: IForumThread = {
     id: thread.id,
     title: thread.title,
@@ -377,12 +385,11 @@ export const getMockThread = (threadId: string): IForumThread | undefined => {
     repliesCount: thread.repliesCount,
     goodVotes: thread.goodVotes,
     badVotes: thread.badVotes,
-    replies: [], // Explicitly set replies to an empty array
+    replies: [],
   };
   return threadDetails;
 };
 
-// Mock function to get replies for a specific thread with pagination
 export const getMockRepliesForThread = (
   threadId: string,
   page: number,
@@ -401,11 +408,9 @@ export const getMockRepliesForThread = (
   };
 };
 
-// Mock search function
 export const searchMock = (keyword: string): (IForumPost | IReply)[] => {
   const lowerKeyword = keyword.toLowerCase();
 
-  // Simple search logic: match keyword in title or content (case-insensitive)
   const matchedThreads = allMockThreads
     .filter(
       (thread) =>
@@ -413,7 +418,6 @@ export const searchMock = (keyword: string): (IForumPost | IReply)[] => {
         thread.content.toLowerCase().includes(lowerKeyword)
     )
     .map((thread) => {
-      // Return as IForumPost for search results
       const { ...postDetails } = thread;
       return {
         ...postDetails,
@@ -423,16 +427,13 @@ export const searchMock = (keyword: string): (IForumPost | IReply)[] => {
 
   const matchedReplies = allMockReplies.filter((reply) =>
     reply.content.toLowerCase().includes(lowerKeyword)
-  ); // Replies are already in IReply format
+  );
 
-  // Combine results (you might want to sort or group them in a real app)
-  // For simplicity, just return a combined array for now
   return [...matchedThreads, ...matchedReplies].sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  ); // Sort by date newest first
+  );
 };
 
-// Mock function to find a user by username and password
 export const findMockUser = (
   username: string,
   password: string
@@ -440,4 +441,28 @@ export const findMockUser = (
   return mockUsers.find(
     (user) => user.username === username && user.password === password
   );
+};
+
+export const createMockPost = (postData: ICreatePostPayload): IForumThread => {
+  const newThread = generateMockThread(postData);
+  allMockThreads.unshift(newThread);
+  return newThread;
+};
+
+export const createMockReply = (
+  threadId: string,
+  replyData: ICreateReplyPayload
+): IReply => {
+  const newReply = generateMockReply(
+    threadId,
+    replyData.content,
+    replyData.mode,
+    replyData.parentReplyId
+  );
+  allMockReplies.push(newReply);
+  const thread = allMockThreads.find((t) => t.id === threadId);
+  if (thread) {
+    thread.repliesCount = (thread.repliesCount || 0) + 1;
+  }
+  return newReply;
 };

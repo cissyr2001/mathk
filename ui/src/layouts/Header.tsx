@@ -20,9 +20,14 @@ const Header: React.FC = () => {
           {FORUM_NAME}
         </Link>
         <nav className="flex items-center">
-          {/* Add navigation links here later */}
-          {/* <Link to="/new-post" className="ml-4 hover:underline">New Post</Link> */}
-
+          {/* Add New Post Button */}
+          <Link
+            to="/new-post"
+            className="ml-4 btn-text text-white text-base"
+            aria-label="Create New Post"
+          >
+            ✍️ New Post
+          </Link>
           {/* Search Button */}
           <Link
             to="/search"
@@ -31,7 +36,6 @@ const Header: React.FC = () => {
           >
             🔍
           </Link>
-
           {/* Show user name or Sign In button */}
           {user ? (
             // Added gap for spacing

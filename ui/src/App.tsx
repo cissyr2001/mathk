@@ -7,20 +7,26 @@ import SearchPage from "./features/forum/pages/SearchPage"; // Import SearchPage
 import SignInPage from "./features/forum/pages/SignInPage";
 import SignUpPage from "./features/forum/pages/SignUpPage"; // Import SignUpPage
 import ThreadPage from "./features/forum/pages/ThreadPage";
+import NewPostPage from "./features/forum/pages/NewPostPage"; // Import NewPostPage
 import Header from "./layouts/Header";
+import { IS_DEVELOPMENT } from "./config/appConfig"; // Import development flag
 
 function App() {
   const { signIn } = useAuthStore(); // Get signIn function from the store
 
-  // Auto sign in a mock user on app load
+  // Auto sign in a mock user on app load in development
   useEffect(() => {
-    // Attempt to sign in the first mock user
-    const defaultUser = mockUsers[0];
-    if (defaultUser) {
-      // In a real app, you'd check for a token/cookie here
-      // For now, we just simulate a successful sign-in with the mock user
-      signIn(defaultUser); // Use the store's signIn action
-      console.log(`Auto signed in as ${defaultUser.username}`);
+    if (IS_DEVELOPMENT) {
+      // Attempt to sign in the first mock user
+      const defaultUser = mockUsers[0];
+      if (defaultUser) {
+        // In a real app, you'd check for a token/cookie here
+        // For now, we just simulate a successful sign-in with the mock user
+        signIn(defaultUser); // Use the store's signIn action
+        console.log(
+          `Auto signed in as ${defaultUser.username} (development mode)`
+        );
+      }
     }
   }, [signIn]); // Dependency array includes signIn to avoid lint warnings
 
@@ -31,7 +37,7 @@ function App() {
       {/* Apply max-width and centering to the main content area */}
       <main className="container mx-auto p-[var(--spacing-md)] md:p-[var(--spacing-lg)] pt-[var(--spacing-header-padding-top)]">
         {/* Apply a specific max-width and center the content */}
-        <div className="max-w-[600px] mx-auto">
+        <div className="max-w-[900px] mx-auto">
           {" "}
           {/* Use arbitrary value for 600px */}
           <Routes>
@@ -43,8 +49,8 @@ function App() {
             {/* Add route for Sign Up page */}
             <Route path="/search" element={<SearchPage />} />{" "}
             {/* Add route for Search page */}
-            {/* Add a route for creating a new post later */}
-            {/* <Route path="/new-post" element={<NewPostPage />} /> */}
+            <Route path="/new-post" element={<NewPostPage />} />{" "}
+            {/* Add route for New Post page */}
             {/* Add a 404 page later */}
             {/* <Route path="*" element={<NotFoundPage />} /> */}
           </Routes>
