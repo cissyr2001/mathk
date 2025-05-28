@@ -1,27 +1,27 @@
-export const TextBlockPresets = {
+export interface TextBlockPreset {
+  mode: "html" | "latex" | "plain" | "markdown" | "augmented";
+  startTag: string;
+}
+
+export const TextBlockPresets: Record<string, TextBlockPreset> = {
   html: {
     mode: "html" as const,
-    start: "--- START HTML BLOCK",
-    end: "--- CLOSE HTML BLOCK",
+    startTag: "--- HTML",
   },
   latex: {
     mode: "latex" as const,
-    start: "--- START LATEX BLOCK",
-    end: "--- CLOSE LATEX BLOCK",
+    startTag: "--- LATEX",
   },
   plain: {
     mode: "plain" as const,
-    start: "--- START PLAIN TEXT BLOCK",
-    end: "--- CLOSE PLAIN TEXT BLOCK",
+    startTag: "--- PLAIN TEXT",
   },
   markdown: {
     mode: "markdown" as const,
-    start: "--- START MARKDOWN BLOCK",
-    end: "--- CLOSE MARKDOWN BLOCK",
+    startTag: "--- MARKDOWN",
   },
   augmented: {
     mode: "augmented" as const,
-    start: "",
-    end: "",
+    startTag: "--- AS",
   },
 };

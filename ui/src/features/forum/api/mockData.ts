@@ -151,55 +151,55 @@ const initialMockThreads: IForumThread[] = [
     content: `
 This thread showcases a variety of content types and mathematical expressions to enhance our forum discussions.
 
---- START HTML BLOCK
+--- HTML
 <h3>Quadratic Formula</h3>
 <p>Solve for x in ax<sup>2</sup> + bx + c = 0</p>
---- CLOSE HTML BLOCK
 
+--- AS
 Here's an augmented script discussing calculus concepts: The limit \`lim_(x->0) sin(x)/x = 1\` is fundamental in calculus, often used in derivative definitions.
 
---- START LATEX BLOCK
+--- LATEX
 \\int_{0}^{\\infty} e^{-x^2} \\, dx = \\frac{\\sqrt{\\pi}}{2}
---- CLOSE LATEX BLOCK
 
+--- AS
 The Pythagorean theorem states that in a right triangle, \`a^2 + b^2 = c^2\`. This is useful for finding the hypotenuse length.
 
---- START MARKDOWN BLOCK
+--- MARKDOWN
 ## Geometric Series
 The sum of an infinite geometric series is given by:
 
 \`\`\`math
 \\sum_{n=0}^{\\infty} r^n = \\frac{1}{1-r}, \\quad |r| < 1
 \`\`\`
---- CLOSE MARKDOWN BLOCK
 
+--- AS
 Let's explore matrix operations with this example: \`A = [[1, 2], [3, 4]]\`. The determinant is calculated as \`det(A) = ad - bc = 1*4 - 2*3 = -2\`.
 
---- START HTML BLOCK
+--- HTML
 <h4>Euler's Identity</h4>
 <p>The beautiful equation connecting e, i, π, 1, and 0:</p>
---- CLOSE HTML BLOCK
 
+--- AS
 In augmented mode, consider the Fourier series: \`f(x) = a_0/2 + sum_(n=1)^oo (a_n cos(n pi x / L) + b_n sin(n pi x / L))\`.
 
---- START LATEX BLOCK
+--- LATEX
 f(x) = \\sum_{n=1}^{\\infty} \\frac{1}{n^2} = \\frac{\\pi^2}{6}
---- CLOSE LATEX BLOCK
 
+--- AS
 Probability concepts can be illustrated with: \`P(A uu B) = P(A) + P(B) - P(A nn B)\`.
 
---- START MARKDOWN BLOCK
+--- MARKDOWN
 ## Binomial Theorem
 For any numbers x, y and non-negative integer n:
 
 \`\`\`math
 (x + y)^n = \\sum_{k=0}^{n} \\binom{n}{k} x^{n-k} y^k
 \`\`\`
---- CLOSE MARKDOWN BLOCK
 
+--- AS
 Here's a step-by-step derivation with aligned equal signs for solving a quadratic equation \`x^2 - 5x + 6 = 0\` using the quadratic formula:
 
---- START LATEX BLOCK
+--- LATEX
 \\begin{align*}
 x &= \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} \\\\
   &= \\frac{-(-5) \\pm \\sqrt{(-5)^2 - 4 \\cdot 1 \\cdot 6}}{2 \\cdot 1} \\\\
@@ -207,8 +207,8 @@ x &= \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} \\\\
   &= \\frac{5 \\pm \\sqrt{1}}{2} \\\\
   &= \\frac{5 \\pm 1}{2}
 \\end{align*}
---- CLOSE LATEX BLOCK
 
+--- AS
 This results in solutions \`x = 3\` or \`x = 2\`. Let's discuss how these formats enhance mathematical communication!
 `,
     replies: [],
@@ -222,7 +222,9 @@ This results in solutions \`x = 3\` or \`x = 2\`. Let's discuss how these format
     title: "Linear Algebra Basics",
     author: "AlgebraFan",
     content:
-      "A place to discuss basic concepts in linear algebra, such as vectors, matrices, and linear transformations.\n\nIf `v = [[v_1], [v_2]]` and `w = [[w_1], [w_2]]`, their dot product is `v * w = v_1 w_1 + v_2 w_2`. How do we represent transformations? A linear transformation T can often be represented by a matrix A such that `T(vec(x)) = A vec(x)`. For example, a rotation matrix might be `R(theta) = [[cos(theta), -sin(theta)], [sin(theta), cos(theta)]]`.",
+      `A place to discuss basic concepts in linear algebra, such as vectors, matrices, and linear transformations.
+
+If \`v = [[v_1], [v_2]]\` and \`w = [[w_1], [w_2]]\`, their dot product is \`v * w = v_1 w_1 + v_2 w_2\`. How do we represent transformations? A linear transformation T can often be represented by a matrix A such that \`T(vec(x)) = A vec(x)\`. For example, a rotation matrix might be \`R(theta) = [[cos(theta), -sin(theta)], [sin(theta), cos(theta)]]\`.`,
     replies: [],
     createdAt: subDays(new Date(), 2).toISOString(),
     repliesCount: 0,
@@ -234,7 +236,7 @@ This results in solutions \`x = 3\` or \`x = 2\`. Let's discuss how these format
     title: "Geometry Exploration",
     author: "GeoGeek",
     content:
-      "Share interesting geometric problems or concepts! Like the Pythagorean theorem: `a^2 + b^2 = c^2`. What about areas and volumes? The area of a circle is `A = pi r^2`, and the volume of a sphere is `V = 4/3 pi r^3`. We can use integrals to derive these formulas, for instance, the area of a circle can be found using `int_0^(2pi) int_0^r rho d rho d theta`.",
+      `Share interesting geometric problems or concepts! Like the Pythagorean theorem: \`a^2 + b^2 = c^2\`. What about areas and volumes? The area of a circle is \`A = pi r^2\`, and the volume of a sphere is \`V = 4/3 pi r^3\`. We can use integrals to derive these formulas, for instance, the area of a circle can be found using \`int_0^(2pi) int_0^r rho d rho d theta\`.`,
     replies: [],
     createdAt: subDays(new Date(), 1).toISOString(),
     repliesCount: 0,
@@ -246,7 +248,23 @@ This results in solutions \`x = 3\` or \`x = 2\`. Let's discuss how these format
     title: "Probability and Statistics Fundamentals",
     author: "StatSage",
     content:
-      "Let's discuss basic probability and statistics. What's the difference between mean, median, and mode? The mean of a dataset `{x_1, x_2, ..., x_n}` is `bar(x) = (sum_(i=1)^n x_i)/n`. We can also talk about concepts like variance `sigma^2` and standard deviation `sigma`. The binomial probability formula is `P(X=k) = C(n, k) p^k (1-p)^(n-k)`.",
+      `Let's discuss basic probability and statistics.
+What's the difference between mean, median, and mode?
+
+--- LATEX
+\\text{The mean of a dataset } \\{x_1, x_2, \\dots, x_n\\} \\text{ is } \\bar{x} = \\frac{\\sum_{i=1}^{n} x_i}{n}
+
+--- AS
+We can also talk about concepts like variance and standard deviation.
+
+--- LATEX
+\\sigma^2 \\text{ and } \\sigma
+
+--- AS
+The binomial probability formula is:
+
+--- LATEX
+P(X=k) = C(n, k) p^k (1-p)^{n-k}`,
     replies: [],
     createdAt: subHours(new Date(), 10).toISOString(),
     repliesCount: 0,
@@ -258,7 +276,19 @@ This results in solutions \`x = 3\` or \`x = 2\`. Let's discuss how these format
     title: "Introduction to Logic",
     author: "LogicLover",
     content:
-      "Exploring fundamental concepts in mathematical logic. We can discuss truth tables, connectives (`and`, `or`, `not`, `=>`, `iff`), and quantifiers (`forall`, `exists`). A simple tautology is `p or !p`. A common logical equivalence is De Morgan's Law: `!(p and q) <=> !p or !q`. This is a great place to practice writing logical expressions.",
+      `Exploring fundamental concepts in mathematical logic.
+
+--- LATEX
+p \\lor \\lnot p
+
+--- AS
+A common logical equivalence is De Morgan's Law:
+
+--- LATEX
+\\lnot(p \\land q) \\iff \\lnot p \\lor \\lnot q
+
+--- AS
+This is a great place to practice writing logical expressions.`,
     replies: [],
     createdAt: subHours(new Date(), 5).toISOString(),
     repliesCount: 0,
@@ -283,7 +313,7 @@ const initialMockReplies: IReply[] = [
     id: "r1_thread1",
     author: "CalcKid",
     content:
-      "What is a derivative? Like, if you have `f(x) = x^2`, is the derivative `f'(x) = 2x`? What about `g(x) = sin(x)`? Is `g'(x) = cos(x)`?",
+      `What is a derivative? Like, if you have \`f(x) = x^2\`, is the derivative \`f'(x) = 2x\`? What about \`g(x) = sin(x)\`? Is \`g'(x) = cos(x)\`?`,
     goodVotes: 5,
     badVotes: 3,
     createdAt: subHours(new Date(), 2).toISOString(),
@@ -293,7 +323,9 @@ const initialMockReplies: IReply[] = [
     id: "r2_thread1",
     author: "LimitLover",
     content:
-      "Limits are tricky. `lim_(x->0) sin(x)/x = 1` is a classic!\n\nAnother good one is `lim_(n->oo) (1 + 1/n)^n = e`. Also, don't forget L'Hopital's rule for indeterminate forms like `lim_(x->c) f(x)/g(x)` when `lim_(x->c) f(x) = lim_(x->c) g(x) = 0` or `+-oo`. It states that `lim_(x->c) f(x)/g(x) = lim_(x->c) f'(x)/g'(x)`.",
+      `Limits are tricky. \`lim_(x->0) sin(x)/x = 1\` is a classic!
+
+Another good one is \`lim_(n->oo) (1 + 1/n)^n = e\`. Also, don't forget L'Hopital's rule for indeterminate forms like \`lim_(x->c) f(x)/g(x)\` when \`lim_(x->c) f(x) = lim_(x->c) g(x) = 0\` or \`+-oo\`. It states that \`lim_(x->c) f(x)/g(x) = lim_(x->c) f'(x)/g'(x)\`.`,
     goodVotes: 15,
     badVotes: 1,
     createdAt: subHours(new Date(), 1.5).toISOString(),
@@ -304,7 +336,7 @@ const initialMockReplies: IReply[] = [
     id: "r3_thread2",
     author: "MatrixMaster",
     content:
-      "Eigenvalues are fun! Consider the matrix `A = [[2, 1], [1, 2]]`. The eigenvalues lambda satisfy `det(A - lambda I) = 0`. The characteristic equation is `(2-lambda)^2 - 1 = 0`. What about larger matrices, like a `3x3` matrix `B = [[1, 2, 3], [0, 1, 4], [5, 6, 0]]`? Finding its eigenvalues is more complex.",
+      `Eigenvalues are fun! Consider the matrix \`A = [[2, 1], [1, 2]]\`. The eigenvalues lambda satisfy \`det(A - lambda I) = 0\`. The characteristic equation is \`(2-lambda)^2 - 1 = 0\`. What about larger matrices, like a \`3x3\` matrix \`B = [[1, 2, 3], [0, 1, 4], [5, 6, 0]]\`? Finding its eigenvalues is more complex.`,
     goodVotes: 8,
     badVotes: 0,
     createdAt: subMinutes(new Date(), 30).toISOString(),
@@ -314,7 +346,7 @@ const initialMockReplies: IReply[] = [
     id: "r4_thread3",
     author: "GeoGeek",
     content:
-      "Does anyone have good resources for non-Euclidean geometry? I'm particularly interested in the curvature `kappa`. How does it relate to the sum of angles in a triangle? In Euclidean geometry, the sum of angles `alpha + beta + gamma = pi` radians (`180^@`), but this is not true for non-Euclidean spaces.",
+      `Does anyone have good resources for non-Euclidean geometry? I'm particularly interested in the curvature \`kappa\`. How does it relate to the sum of angles in a triangle? In Euclidean geometry, the sum of angles \`alpha + beta + gamma = pi\` radians (\`180^@\`), but this is not true for non-Euclidean spaces.`,
     goodVotes: 3,
     badVotes: 2,
     createdAt: subMinutes(new Date(), 10).toISOString(),
@@ -324,7 +356,7 @@ const initialMockReplies: IReply[] = [
     id: "r5_thread1",
     author: "MathGuru",
     content:
-      "That limit example is great, @LimitLover! Yes, `lim_(x->0) sin(x)/x = 1` is fundamental. For the derivative, @CalcKid, you are correct! The derivative of `sin(x)` is indeed `cos(x)`. We can prove this using the limit definition: `(d)/(dx)sin(x) = lim_(h->0) (sin(x+h) - sin(x))/h`.",
+      `That limit example is great, @LimitLover! Yes, \`lim_(x->0) sin(x)/x = 1\` is fundamental. For the derivative, @CalcKid, you are correct! The derivative of \`sin(x)\` is indeed \`cos(x)\`. We can prove this using the limit definition: \`(d)/(dx)sin(x) = lim_(h->0) (sin(x+h) - sin(x))/h\`.`,
     goodVotes: 7,
     badVotes: 0,
     createdAt: subMinutes(new Date(), 5).toISOString(),
@@ -335,7 +367,7 @@ const initialMockReplies: IReply[] = [
     id: "r6_thread1",
     author: "AlgebraFan",
     content:
-      "What about solving quadratic equations? The formula is `x = (-b pm sqrt(b^2 - 4ac)) / (2a)`. This is derived using completing the square. For example, if `ax^2 + bx + c = 0`, divide by `a` (`a != 0`) to get `x^2 + (b/a)x + (c/a) = 0`.",
+      `What about solving quadratic equations? The formula is \`x = (-b pm sqrt(b^2 - 4ac)) / (2a)\`. This is derived using completing the square. For example, if \`ax^2 + bx + c = 0\`, divide by \`a\` (\`a != 0\`) to get \`x^2 + (b/a)x + (c/a) = 0\`.`,
     goodVotes: 10,
     badVotes: 0,
     createdAt: subMinutes(new Date(), 1).toISOString(),
@@ -345,7 +377,7 @@ const initialMockReplies: IReply[] = [
     id: "r7_thread4",
     author: "StatSage",
     content:
-      "Does anyone work with probability? What is the formula for the probability of the union of two events A and B? It's `P(A uu B) = P(A) + P(B) - P(A nn B)`. And for disjoint events, `P(A nn B) = 0`, so `P(A uu B) = P(A) + P(B)`.",
+      `Does anyone work with probability? What is the formula for the probability of the union of two events A and B? It's \`P(A uu B) = P(A) + P(B) - P(A nn B)\`. And for disjoint events, \`P(A nn B) = 0\`, so \`P(A uu B) = P(A) + P(B)\`.`,
     goodVotes: 9,
     badVotes: 1,
     createdAt: subMinutes(new Date(), 45).toISOString(),
@@ -355,7 +387,7 @@ const initialMockReplies: IReply[] = [
     id: "r8_thread5",
     author: "LogicLover",
     content:
-      "Just started learning about propositional logic. If p and q are propositions, is the statement `p => q` equivalent to `!p or q`? Yes, it is! What about `p iff q`? That's equivalent to `(p => q) and (q => p)`.",
+      `Just started learning about propositional logic. If p and q are propositions, is the statement \`p => q\` equivalent to \`!p or q\`? Yes, it is! What about \`p iff q\`? That's equivalent to \`(p => q) and (q => p)\`.`,
     goodVotes: 6,
     badVotes: 0,
     createdAt: subMinutes(new Date(), 20).toISOString(),
@@ -365,7 +397,7 @@ const initialMockReplies: IReply[] = [
     id: "r9_thread1",
     author: "MathGuru",
     content:
-      "Regarding integrals, calculating definite integrals often involves the Fundamental Theorem of Calculus: `int_a^b f(x) dx = F(b) - F(a)`, where F is an antiderivative of f. For example, `int_0^1 x^2 dx = [x^3/3]_0^1 = 1^3/3 - 0^3/3 = 1/3`.",
+      `Regarding integrals, calculating definite integrals often involves the Fundamental Theorem of Calculus: \`int_a^b f(x) dx = F(b) - F(a)\`, where F is an antiderivative of f. For example, \`int_0^1 x^2 dx = [x^3/3]_0^1 = 1^3/3 - 0^3/3 = 1/3\`.`,
     goodVotes: 12,
     badVotes: 0,
     createdAt: subMinutes(new Date(), 3).toISOString(),

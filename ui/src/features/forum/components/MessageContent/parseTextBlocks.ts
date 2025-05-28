@@ -6,77 +6,56 @@ interface TextBlock {
   content: string;
 }
 
+const AUGMENTED_TYPE: EditorMode = TextBlockPresets.augmented.mode;
+
 export const parseTextBlocks = (text: string): TextBlock[] => {
   const blocks: TextBlock[] = [];
-  let remainingText = text;
-  let lastIndex = 0;
+  const lines = text.split('\n');
+  let currentBlockType: EditorMode | null = null;
+  let currentBlockContent: string[] = [];
 
-  while (remainingText.length > 0) {
-    let foundBlock = false;
-    let earliestStart = remainingText.length;
-    let matchedPattern = null;
+  const presetStartTags = Object.values(TextBlockPresets).map(
+    (preset) => preset.startTag
+  );
 
-    // Find the earliest block start
-    for (const pattern of Object.values(TextBlockPresets).filter(
-      (x) => !!x.start
-    )) {
-      const startIndex = remainingText.indexOf(pattern.start);
-      if (startIndex !== -1 && startIndex < earliestStart) {
-        earliestStart = startIndex;
-        matchedPattern = pattern;
-      }
-    }
+  for (const line of lines) {
+    const matchingPreset = Object.values(TextBlockPresets).find(
+      (preset) => preset.startTag === line.trim()
+    );
 
-    if (matchedPattern && earliestStart !== remainingText.length) {
-      // Add text before the block as Augmented Script
-      if (earliestStart > 0) {
+    if (matchingPreset) {
+      // Found a start tag
+      if (currentBlockContent.length > 0) {
+        // Add the previous block
         blocks.push({
-          type: "augmented",
-          content: remainingText.substring(0, earliestStart),
+          type: currentBlockType || AUGMENTED_TYPE,
+          content: currentBlockContent.join('\n').trim(),
         });
       }
-
-      // Find the end of the block
-      const startLength = matchedPattern.start.length;
-      const endIndex = remainingText.indexOf(
-        matchedPattern.end,
-        earliestStart + startLength
-      );
-
-      if (endIndex !== -1) {
-        const blockContent = remainingText.substring(
-          earliestStart + startLength,
-          endIndex
-        );
-        const blockType = Object.keys(TextBlockPresets).find(
-          (key) => TextBlockPresets[key].start === matchedPattern.start
-        ) as EditorMode;
-        blocks.push({
-          type: blockType,
-          content: blockContent.trim(),
-        });
-        remainingText = remainingText.substring(
-          endIndex + matchedPattern.end.length
-        );
-        lastIndex = 0;
-      } else {
-        // No end tag found, treat the rest as Augmented Script
-        blocks.push({
-          type: "augmented",
-          content: remainingText,
-        });
-        remainingText = "";
-      }
-      foundBlock = true;
+      // Start a new block
+      currentBlockType = matchingPreset.mode;
+      currentBlockContent = [];
     } else {
-      // No more blocks found, treat the rest as Augmented Script
-      blocks.push({
-        type: "augmented",
-        content: remainingText,
-      });
-      remainingText = "";
+      // Not a start tag, add line to current block
+      if (currentBlockType === null && line.trim() !== "") {
+        // Default to augmented if no block has started yet and line is not empty
+        currentBlockType = AUGMENTED_TYPE;
+      }
+      currentBlockContent.push(line);
     }
   }
 
-  return blocks;
+  // Add the last block if there's any content
+  if (currentBlockContent.length > 0) {
+    blocks.push({
+      type: currentBlockType || AUGMENTED_TYPE,
+      content: currentBlockContent.join('\n').trim(),
+    });
+  }
+
+  // Filter out empty blocks that might have been created
+  const finalBlocks = blocks.filter(block => block.content.length > 0);
+
+  console.log('\nFinal parsed blocks:', finalBlocks);
+  return finalBlocks;
 };

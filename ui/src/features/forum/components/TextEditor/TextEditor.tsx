@@ -57,12 +57,12 @@ const TextEditor: React.FC<TextEditorProps> = ({ value, onChange }) => {
       );
       const operation = {
         range,
-        text: `${preset.start}\n${preset.end}`,
+        text: `${preset.startTag}\n`,
         forceMoveMarkers: true,
       };
       editor.executeEdits("insert-block", [operation]);
 
-      // Move cursor to middle of wrapper
+      // Move cursor to next line after the start tag
       const newPosition = {
         lineNumber: position.lineNumber + 1,
         column: 1,
@@ -75,7 +75,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ value, onChange }) => {
       onChange(newValue, selectedMode);
     } else {
       // Fallback if editor not mounted
-      const newValue = `${value}${preset.start}\n${preset.end}`;
+      const newValue = `${value}${preset.startTag}\n`;
       onChange(newValue, selectedMode);
     }
   };
