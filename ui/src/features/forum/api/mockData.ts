@@ -35,9 +35,9 @@ const generateRandomDate = (recentHours = 24 * 30) => {
 
 const generateLoremMath = (sentences = 1) => {
   const mathExamples = [
-    "`x = (-b pm sqrt(b^2 - 4ac)) / (2a)`",
-    "`int_a^b f(x) dx = F(b) - F(a)`",
-    "`sum_(n=1)^oo 1/n^2 = pi^2/6`",
+    "`x = (-b \\pm \\sqrt(b^2 - 4ac)) / (2a)`",
+    "`\\int_a^b f(x) dx = F(b) - F(a)`",
+    "`\\sum_(n=1)^oo 1/n^2 = pi^2/6`",
     "`[[a, b], [c, d]]`",
     "`lim_(x->0) sin(x)/x`",
     "`e^(i pi) + 1 = 0`",
@@ -45,15 +45,15 @@ const generateLoremMath = (sentences = 1) => {
     "`forall x in RR, exists y in RR such that y > x`",
     "`A uu (B nn C) = (A uu B) nn (A uu C)`",
     "`d/(dx) (x^n) = nx^(n-1)`",
-    "`int int_R f(x,y) dA`",
+    "`\\int \\int_R f(x,y) dA`",
     "`vec(F) = q(vec(E) + vec(v) xx vec(B))`",
     "`C(n, k) = n! / (k! (n-k)!)`",
-    "`|vec(v)| = sqrt(v_x^2 + v_y^2 + v_z^2)`",
-    "`phi = (1 + sqrt(5))/2`",
+    "`|vec(v)| = \\sqrt(v_x^2 + v_y^2 + v_z^2)`",
+    "`phi = (1 + \\sqrt(5))/2`",
     "`[[cos(theta), -sin(theta)], [sin(theta), cos(theta)]]`",
     "`p => q <=> !q or q`",
-    "`sigma^2 = 1/N sum_(i=1)^N (x_i - bar(x))^2`",
-    "`oint_C vec(F) * d vec(r) = int int_S (nabla xx vec(F)) * d vec(S)`",
+    "`sigma^2 = 1/N \\sum_(i=1)^N (x_i - bar(x))^2`",
+    "`\\oint_C vec(F) * d vec(r) = \\int \\int_S (nabla xx vec(F)) * d vec(S)`",
     "`partial^2 f / partial x partial y = partial^2 f / partial y partial x`",
     "`prod_(i=1)^n a_i`",
     "`abs(x)`",
@@ -145,77 +145,43 @@ const generateMockThread = (postData?: ICreatePostPayload): IForumThread => {
 
 const initialMockThreads: IForumThread[] = [
   {
-    id: "1",
-    title: "Exploring Multiple Content Types in Mathematics",
+    id: "showcase_1",
+    title: "Augmented Script: Interactive Math & Visualization Demo",
     author: "MathGuru",
-    content: `
-This thread showcases a variety of content types and mathematical expressions to enhance our forum discussions.
+    content: `Let's explore the power of Augmented Script with an interactive mathematical demonstration!
+@Radius = 5.12345678901234567890123
+@Pi = PI
+@Area = @Radius * @Radius * @Pi
+What is the area of a circle with radius @Radius?
+The area is @Area square units.
 
---- HTML
-<h3>Quadratic Formula</h3>
-<p>Solve for x in ax<sup>2</sup> + bx + c = 0</p>
+# Testing new parser features:
+@X = 123.456789012345678901234567890
+@Y = 987.654321098765432109876543210
+@Power = @X ^ 3  # Using the new ^ operator for exponentiation
+@Sum = @X + @Y   # High precision addition
+@Product = @Power * @Y  # Combining operations
+The value of @X^3 is @Power
+The sum of @X and @Y is @Sum
 
---- AS
-Here's an augmented script discussing calculus concepts: The limit \`lim_(x->0) sin(x)/x = 1\` is fundamental in calculus, often used in derivative definitions.
+# Testing 2 new parser features:
+@X = 123.4567
+@Y = 987.6543
+@Power = @X ^ 3  # Using the new ^ operator for exponentiation
+@Sum = @X + @Y   # High precision addition
+@Product = @Power * @Y  # Combining operations
+The value of @X^3 is @Power
+The sum of @X and @Y is @Sum
 
---- LATEX
-\\int_{0}^{\\infty} e^{-x^2} \\, dx = \\frac{\\sqrt{\\pi}}{2}
-
---- AS
-The Pythagorean theorem states that in a right triangle, \`a^2 + b^2 = c^2\`. This is useful for finding the hypotenuse length.
-
---- MARKDOWN
-## Geometric Series
-The sum of an infinite geometric series is given by:
-
-\`\`\`math
-\\sum_{n=0}^{\\infty} r^n = \\frac{1}{1-r}, \\quad |r| < 1
-\`\`\`
-
---- AS
-Let's explore matrix operations with this example: \`A = [[1, 2], [3, 4]]\`. The determinant is calculated as \`det(A) = ad - bc = 1*4 - 2*3 = -2\`.
-
---- HTML
-<h4>Euler's Identity</h4>
-<p>The beautiful equation connecting e, i, π, 1, and 0:</p>
-
---- AS
-In augmented mode, consider the Fourier series: \`f(x) = a_0/2 + sum_(n=1)^oo (a_n cos(n pi x / L) + b_n sin(n pi x / L))\`.
-
---- LATEX
-f(x) = \\sum_{n=1}^{\\infty} \\frac{1}{n^2} = \\frac{\\pi^2}{6}
-
---- AS
-Probability concepts can be illustrated with: \`P(A uu B) = P(A) + P(B) - P(A nn B)\`.
-
---- MARKDOWN
-## Binomial Theorem
-For any numbers x, y and non-negative integer n:
-
-\`\`\`math
-(x + y)^n = \\sum_{k=0}^{n} \\binom{n}{k} x^{n-k} y^k
-\`\`\`
-
---- AS
-Here's a step-by-step derivation with aligned equal signs for solving a quadratic equation \`x^2 - 5x + 6 = 0\` using the quadratic formula:
-
---- LATEX
-\\begin{align*}
-x &= \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} \\\\
-  &= \\frac{-(-5) \\pm \\sqrt{(-5)^2 - 4 \\cdot 1 \\cdot 6}}{2 \\cdot 1} \\\\
-  &= \\frac{5 \\pm \\sqrt{25 - 24}}{2} \\\\
-  &= \\frac{5 \\pm \\sqrt{1}}{2} \\\\
-  &= \\frac{5 \\pm 1}{2}
-\\end{align*}
-
---- AS
-This results in solutions \`x = 3\` or \`x = 2\`. Let's discuss how these formats enhance mathematical communication!
+The value of π is @PI and e is @E
+@result = sqrt(2) * PI
+The calculation gives us @result
 `,
     replies: [],
-    createdAt: subHours(new Date(), 1).toISOString(),
+    createdAt: new Date().toISOString(),
     repliesCount: 0,
-    goodVotes: 20,
-    badVotes: 2,
+    goodVotes: 0,
+    badVotes: 0,
   },
   {
     id: "2",
@@ -295,6 +261,84 @@ This is a great place to practice writing logical expressions.`,
     goodVotes: 7,
     badVotes: 0,
   },
+  {
+    id: "as_showcase_1",
+    title: "Augmented Script: Full Feature Showcase",
+    author: "MathGuru",
+    content: `
+Welcome to the **Augmented Script (AS) Full Feature Showcase**! This post demonstrates the expressive power of AS for mathematical communication.
+
+--- AS
+# Inline Math & Block Math
+The quadratic formula: \`x = (-b pm sqrt(b^2 - 4ac)) / (2a)\`
+
+# Step-by-Step Derivation (Aligned)
+Let's solve \`x^2 - 5x + 6 = 0\`:
+\`x = (-b pm sqrt(b^2 - 4ac)) / (2a)\`
+  \`= (5 pm sqrt{25 - 24}) / 2\`
+  \`= (5 pm 1) / 2\`
+  \`= 3 text{ or } 2\`
+
+--- AS
+# Highlighting & Referencing
+> **Tip:** Remember the discriminant \`b^2 - 4ac\` determines the nature of roots.
+
+See also: [Quadratic Formula Reference](https://en.wikipedia.org/wiki/Quadratic_formula)
+
+--- AS
+# Lists & Tables
+- **List Example:**
+  - Vectors
+  - Matrices
+  - Tensors
+
+| Symbol | Meaning         |
+|--------|----------------|
+| \`\\int\` | Integral       |
+| \`\\sum\` | Summation      |
+| \`\\prod\`| Product        |
+
+--- AS
+# Logical, Set, and Calculus Notation
+- Logical: \`p => q <=> !p or q\`
+- Set: \`A nn B = {x | x in A and x in B}\`
+- Calculus: \`d/(dx) (x^n) = nx^(n-1)\`
+
+--- AS
+# Code Block & Explanation
+
+def factorial(n):
+    return 1 if n == 0 else n * factorial(n-1)
+
+This Python function computes \`n!\` recursively.
+
+--- AS
+# Diagram (ASCII Art)
+   /|\
+  /_|_\
+ /__|__\
+    |
+
+A simple triangle diagram.
+
+--- AS
+# Comments & Multi-format Mixing
+// This is an AS comment. Comments are ignored in rendering.
+
+You can mix **Markdown**, \`inline code\`, and AS math: \`E = mc^2\`.
+
+--- AS
+# Referencing Previous Results
+Recall from above: \`x = 3 or 2\`.
+
+Let's discuss how these features can enhance your mathematical writing!
+`,
+    replies: [],
+    createdAt: subHours(new Date(), 0.5).toISOString(),
+    repliesCount: 0,
+    goodVotes: 0,
+    badVotes: 0,
+  },
 ];
 
 const additionalMockThreads: IForumThread[] = Array.from({ length: 20 }).map(
@@ -367,7 +411,7 @@ Another good one is \`lim_(n->oo) (1 + 1/n)^n = e\`. Also, don't forget L'Hopita
     id: "r6_thread1",
     author: "AlgebraFan",
     content:
-      `What about solving quadratic equations? The formula is \`x = (-b pm sqrt(b^2 - 4ac)) / (2a)\`. This is derived using completing the square. For example, if \`ax^2 + bx + c = 0\`, divide by \`a\` (\`a != 0\`) to get \`x^2 + (b/a)x + (c/a) = 0\`.`,
+      `What about solving quadratic equations? The formula is \`x = (-b \\pm \\sqrt(b^2 - 4ac)) / (2a)\`. This is derived using completing the square. For example, if \`ax^2 + bx + c = 0\`, divide by \`a\` (\`a != 0\`) to get \`x^2 + (b/a)x + (c/a) = 0\`.`,
     goodVotes: 10,
     badVotes: 0,
     createdAt: subMinutes(new Date(), 1).toISOString(),
@@ -397,7 +441,7 @@ Another good one is \`lim_(n->oo) (1 + 1/n)^n = e\`. Also, don't forget L'Hopita
     id: "r9_thread1",
     author: "MathGuru",
     content:
-      `Regarding integrals, calculating definite integrals often involves the Fundamental Theorem of Calculus: \`int_a^b f(x) dx = F(b) - F(a)\`, where F is an antiderivative of f. For example, \`int_0^1 x^2 dx = [x^3/3]_0^1 = 1^3/3 - 0^3/3 = 1/3\`.`,
+      `Regarding integrals, calculating definite integrals often involves the Fundamental Theorem of Calculus: \`int_a^b f(x) dx = F(b) - F(a)\`, where F is an antiderivative of f. For example, \`int_0^1 x^2 dx = [x^3/3]_0^1 = 1/3\`.`,
     goodVotes: 12,
     badVotes: 0,
     createdAt: subMinutes(new Date(), 3).toISOString(),

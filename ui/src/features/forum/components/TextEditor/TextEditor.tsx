@@ -3,6 +3,7 @@ import * as monaco from "monaco-editor";
 import React, { useRef, useState } from "react";
 import MessageContent from "../MessageContent/MessageContent";
 import { TextBlockPresets } from "../MessageContent/TextBlockPresets";
+import { MathfieldElement } from "mathlive";
 
 type EditorMode = "plain" | "latex" | "html" | "markdown" | "augmented";
 
@@ -14,8 +15,10 @@ interface TextEditorProps {
 const TextEditor: React.FC<TextEditorProps> = ({ value, onChange }) => {
   const [mode, setMode] = useState<EditorMode>(TextBlockPresets.augmented.mode);
   const [showModal, setShowModal] = useState(false);
+  const [showMathModal, setShowMathModal] = useState(false);
   const [previewContent, setPreviewContent] = useState(value);
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+  const mathfieldRef = useRef<MathfieldElement | null>(null);
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
   const handleTextChange = (newValue: string | undefined) => {
@@ -80,17 +83,81 @@ const TextEditor: React.FC<TextEditorProps> = ({ value, onChange }) => {
     }
   };
 
+  const handleAddMathExpression = () => {
+    if (mathfieldRef.current) {
+      const latex = mathfieldRef.current.getValue('latex');
+      const asciimath = mathfieldRef.current.getValue('ascii-math');
+
+      // If the expression can be represented in AsciiMath, use it
+      if (asciimath && asciimath.trim() !== '') {
+        const newValue = editorRef.current?.getValue() || '';
+        const position = editorRef.current?.getPosition() || { lineNumber: 1, column: 1 };
+        const operation = {
+          range: new monaco.Range(
+            position.lineNumber,
+            position.column,
+            position.lineNumber,
+            position.column
+          ),
+          text: `\`${asciimath}\` `,
+          forceMoveMarkers: true,
+        };
+        editorRef.current?.executeEdits('insert-math', [operation]);
+      } else {
+        // If it's too complex for AsciiMath, use LaTeX block
+        handleAddTextBlock(TextBlockPresets.latex.mode);
+        const newValue = editorRef.current?.getValue() || '';
+        const position = editorRef.current?.getPosition() || { lineNumber: 1, column: 1 };
+        const operation = {
+          range: new monaco.Range(
+            position.lineNumber,
+            position.column,
+            position.lineNumber,
+            position.column
+          ),
+          text: latex,
+          forceMoveMarkers: true,
+        };
+        editorRef.current?.executeEdits('insert-math', [operation]);
+      }
+    }
+    setShowMathModal(false);
+  };
+
+  React.useEffect(() => {
+    // Initialize MathLive field when math modal is shown
+    if (showMathModal && !mathfieldRef.current) {
+      const mathfield = new MathfieldElement();
+      mathfield.style.width = '100%';
+      mathfield.style.minHeight = '100px';
+      mathfield.style.border = '1px solid var(--color-border)';
+      mathfield.style.borderRadius = 'var(--border-radius-sm)';
+      mathfield.style.padding = 'var(--spacing-sm)';
+      mathfield.style.marginBottom = 'var(--spacing-md)';
+      mathfieldRef.current = mathfield;
+      document.getElementById('math-editor-container')?.appendChild(mathfield);
+    }
+  }, [showMathModal]);
+
   const lineCount = value.split("\n").length;
   const showLineNumbers = lineCount > 50;
 
   return (
     <div className="mb-4">
-      <button
-        className="mb-2 btn btn-default btn-sm"
-        onClick={() => setShowModal(true)}
-      >
-        Add Text Block
-      </button>
+      <div className="flex gap-2 mb-2">
+        <button
+          className="btn btn-default btn-sm"
+          onClick={() => setShowModal(true)}
+        >
+          Add Text Block
+        </button>
+        <button
+          className="btn btn-default btn-sm"
+          onClick={() => setShowMathModal(true)}
+        >
+          Add Math Expression
+        </button>
+      </div>
 
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -136,6 +203,31 @@ const TextEditor: React.FC<TextEditorProps> = ({ value, onChange }) => {
         </div>
       )}
 
+      {showMathModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-[color:var(--color-surface)] rounded-[var(--border-radius-md)] p-[var(--spacing-md)] shadow-md border border-[color:var(--color-border)] max-w-lg w-full">
+            <h3 className="text-lg font-semibold mb-[var(--spacing-md)]">
+              Math Expression Editor
+            </h3>
+            <div id="math-editor-container" className="mb-[var(--spacing-md)]"></div>
+            <div className="flex justify-end gap-[var(--spacing-sm)]">
+              <button
+                className="btn btn-default"
+                onClick={() => setShowMathModal(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="btn btn-primary"
+                onClick={handleAddMathExpression}
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-row gap-[var(--spacing-md)]">
         <div className="w-1/2">
           <Editor
@@ -144,10 +236,10 @@ const TextEditor: React.FC<TextEditorProps> = ({ value, onChange }) => {
               mode === TextBlockPresets.latex.mode
                 ? "latex"
                 : mode === TextBlockPresets.html.mode
-                ? "html"
-                : mode === TextBlockPresets.markdown.mode
-                ? "markdown"
-                : "plaintext"
+                  ? "html"
+                  : mode === TextBlockPresets.markdown.mode
+                    ? "markdown"
+                    : "plaintext"
             }
             value={value}
             onChange={handleTextChange}

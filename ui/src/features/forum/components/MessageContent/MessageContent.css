@@ -1,0 +1,57 @@
+/* Numeric interpolation styling */
+.numeric-interpolation {
+  display: inline;
+}
+
+/* Base styling for all numeric interpolation spans */
+.numeric-interpolation span {
+  transition: all 0.2s ease;
+  border-radius: 4px;
+  padding: 2px 4px;
+  margin: 0 1px;
+  text-decoration: none;
+  /* Prevent text selection on fast multi-clicks */
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Dotted underline only for rotatable numeric values */
+.numeric-interpolation span.numeric-rotatable {
+  border-bottom: 1px dotted rgba(59, 130, 246, 0.5);
+}
+
+/* Hover effects only for rotatable numeric values */
+.numeric-interpolation span.numeric-rotatable:hover {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: rgb(37, 99, 235);
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Static numeric values have no dotted underline or hover effects */
+.numeric-interpolation span.numeric-static {
+  /* No special styling - just inherits base styles */
+}
+
+/* Text block styling */
+.text-block {
+  margin-bottom: 0.5rem;
+}
+
+.text-block:last-child {
+  margin-bottom: 0;
+}
+
+.text-block-plain .numeric-interpolation span {
+  background-color: rgba(243, 244, 246, 0.8);
+}
+
+.text-block-html .numeric-interpolation span {
+  background-color: rgba(254, 243, 199, 0.8);
+}
+
+.text-block-markdown .numeric-interpolation span {
+  background-color: rgba(219, 234, 254, 0.8);
+} 

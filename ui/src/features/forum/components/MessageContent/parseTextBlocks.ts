@@ -56,6 +56,5 @@ export const parseTextBlocks = (text: string): TextBlock[] => {
   // Filter out empty blocks that might have been created
   const finalBlocks = blocks.filter(block => block.content.length > 0);
 
-  console.log('\nFinal parsed blocks:', finalBlocks);
   return finalBlocks;
 };
