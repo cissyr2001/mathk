@@ -1,4 +1,4 @@
-import { PREDEFINED_CONSTANTS } from "./augmented-script/constants.constant";
+import { CONSTANTS } from "./augmented-script/constants.constant";
 import { processLine } from "./augmented-script/script-processor.service";
 import type { FigureContext, RenderAugmentedBlockParams, AugmentedScriptVars } from "./augmented-script/types";
 import { appendOutputElement } from "./augmented-script/utils";
@@ -10,7 +10,7 @@ export const renderAugmentedBlock = (
   mainBlockDiv.className = "text-block text-block-augmented";
 
   const lines = params.content.split('\n');
-  const runtimeVars: AugmentedScriptVars = { ...PREDEFINED_CONSTANTS };
+  const runtimeVars = { ...CONSTANTS } as unknown as AugmentedScriptVars;
   let figureContext: FigureContext | null = null;
 
   for (const line of lines) {

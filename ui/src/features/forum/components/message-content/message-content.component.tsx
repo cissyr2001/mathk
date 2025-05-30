@@ -13,9 +13,10 @@ import useAuthStore from "../../../auth/hooks/use-auth-store.hook";
 import { parseTextBlocks } from "./parse-text-blocks.util";
 import { renderAugmentedBlock } from "./render-augmented-block.util";
 import { TextBlockPresets } from "./text-block-presets.constant";
-import { PREDEFINED_CONSTANTS } from "./augmented-script/constants.constant";
+import { CONSTANTS } from "./augmented-script/constants.constant";
 import { interpolateString } from "./augmented-script/string-utils";
 import { interpolateStringEnhanced, interpolateStringSimple } from "./augmented-script/enhanced-string-utils.util";
+import type { AugmentedScriptVars } from "./augmented-script/types";
 
 interface MessageContentProps {
   content: string;
@@ -46,7 +47,7 @@ const MessageContent: React.FC<MessageContentProps> = ({ content, mode, showSour
         return;
       }
 
-      const runtimeVars = { ...PREDEFINED_CONSTANTS };
+      const runtimeVars = { ...CONSTANTS } as unknown as AugmentedScriptVars;
 
       if (mode === TextBlockPresets.plain.mode) {
         const interpolationResult = interpolateStringEnhanced(content, runtimeVars);

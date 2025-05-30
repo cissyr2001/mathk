@@ -1,11 +1,10 @@
-import Decimal from "decimal.js";
-import { createErrorElement } from "../utils";
-import { evaluateExpression as evalExpr } from "../expression-parser.service";
-import { parseArrayAssignment, isArrayAssignment } from "../array-parser.service";
-import { handleVariableRender } from "./variable-render.handler";
-import { MAX_FIGURE_ELEMENTS } from "../constants.constant";
+import { isArrayAssignment, parseArrayAssignment } from "../array-parser.service";
 import { BUILT_IN_FUNCTIONS } from "../built-ins.constant";
-import type { ScriptLineResult, AugmentedScriptVars, FigureContext, Point } from "../types";
+import { MAX_FIGURE_ELEMENTS } from "../constants.constant";
+import { evaluateExpression as evalExpr } from "../expression-parser.service";
+import type { AugmentedScriptVars, FigureContext, Point, ScriptLineResult } from "../types";
+import { createErrorElement } from "../utils";
+import { handleVariableRender } from "./variable-render.handler";
 
 export function handleVariableAssignment(
   trimmedLine: string,

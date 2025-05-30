@@ -1,5 +1,5 @@
 import Decimal from 'decimal.js';
-import { PREDEFINED_CONSTANTS } from './constants.constant';
+import { CONSTANTS } from './constants.constant';
 import type { AugmentedScriptVars } from './types';
 
 // Step 1: Token extraction and variable mapping
@@ -34,7 +34,7 @@ function extractAndMapTokens(expression: string, vars: AugmentedScriptVars): Tok
   const varPattern = /@[a-zA-Z0-9_]+/g;
   currentExpression = currentExpression.replace(varPattern, (match) => {
     const varName = match.substring(1); // Remove @ prefix
-    
+
     // If this is the left side of an assignment, just create a placeholder
     if (isAssignment && match === leftPart) {
       tokenValues.push(new Decimal(0));
@@ -70,13 +70,14 @@ function extractAndMapTokens(expression: string, vars: AugmentedScriptVars): Tok
   });
 
   // Third pass: Extract built-in constants
-  const constantPattern = /\b(PI|E|SQRT2)\b/g;
+  const constantPattern = /\b(PI|E|PHI|EULER_MASCHERONI|CONWAY_CONSTANT|KAPREKAR_CONSTANT|SPEED_OF_LIGHT|PLANCK_CONSTANT|GRAVITATIONAL_CONSTANT|BOLTZMANN_CONSTANT|SQRT2|SQRT3|SQRT5)\b/g;
   currentExpression = currentExpression.replace(constantPattern, (match) => {
-    const constant = PREDEFINED_CONSTANTS[match];
-    if (!constant) {
+    const constant = CONSTANTS[match];
+    if (constant === undefined) {
       throw new Error(`Unknown constant: ${match}`);
     }
-    tokenValues.push(constant);
+    // The proxy ensures constant is a Decimal
+    tokenValues.push(constant as unknown as Decimal);
     return `VAR${tokenValues.length - 1}`;
   });
 
@@ -344,10 +345,10 @@ export function evaluateExpression(expr: string, vars: AugmentedScriptVars, buil
   const parser = new Parser(mappedExpression);
   const ast = parser.parse();
 
-  console.log('originalExpression',originalExpression);
-  console.log('mappedExpression',mappedExpression);
-  console.log('tokenValues',tokenValues);
-  console.log('ast',ast);
+  console.log('originalExpression', originalExpression);
+  console.log('mappedExpression', mappedExpression);
+  console.log('tokenValues', tokenValues);
+  console.log('ast', ast);
 
   // Step 3: Evaluate AST with high precision numbers
   if (ast.type === 'Assignment') {

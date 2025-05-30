@@ -4,7 +4,7 @@
  */
 
 import Decimal from "decimal.js";
-import { PREDEFINED_CONSTANTS } from "./constants.constant";
+import { CONSTANTS } from "./constants.constant";
 import { evaluateExpression as evaluateExpr } from "./expression-parser.service";
 import { interpolateString } from "./string-utils";
 import type { AugmentedScriptVars, Point } from "./types";
@@ -51,7 +51,8 @@ export function evaluateExpressionOld(
   }
 
   // First check if it's a predefined constant
-  if (PREDEFINED_CONSTANTS[originalExpr]) return PREDEFINED_CONSTANTS[originalExpr];
+  const constant = CONSTANTS[originalExpr];
+  if (constant !== undefined) return constant as unknown as Decimal;
 
   // Then check if it's a direct variable reference
   if (runtimeVars[originalExpr] instanceof Decimal) return runtimeVars[originalExpr] as Decimal;
