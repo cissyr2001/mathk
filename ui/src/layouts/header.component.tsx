@@ -8,7 +8,7 @@ const Header: React.FC = () => {
 
   return (
     // Use the new header background color variable
-    <header className="bg-[color:var(--color-header-bg)] text-white p-[var(--spacing-md)] shadow-md">
+    <header className="bg-[color:var(--color-header-bg)] text-white p-[var(--spacing-md)] shadow-md sticky top-0 z-50">
       <div className="container mx-auto flex justify-between items-center">
         {/* Text color handled by CSS rule on header */}
         {/* Increase font size and use config name */}

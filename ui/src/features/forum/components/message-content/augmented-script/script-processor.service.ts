@@ -9,7 +9,10 @@ export function processLine(
   runtimeVars: AugmentedScriptVars,
   currentFigureContext: FigureContext | null
 ): ScriptLineResult {
-  const trimmedLine = line.trim();
+  // Remove comments (everything after //)
+  const commentIndex = line.indexOf('// ');
+  const lineWithoutComments = commentIndex !== -1 ? line.substring(0, commentIndex) : line;
+  const trimmedLine = lineWithoutComments.trim();
   if (!trimmedLine) return {}; // Skip empty lines
 
   try {

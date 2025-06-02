@@ -66,8 +66,23 @@ export function interpolateStringEnhanced(
       if (value instanceof Decimal || (typeof value === 'number' && !isNaN(value))) {
         const decimalValue = value instanceof Decimal ? value : new Decimal(value);
 
-        // Check if the number should be rendered as HTML element
-        if (shouldRenderAsHtmlElement(decimalValue)) {
+        // Check if the variable is between backticks
+        const isBetweenBackticks = (() => {
+          // Look for the nearest backtick before and after the variable
+          const beforeText = str.substring(0, matchStart);
+          const afterText = str.substring(matchEnd);
+          const lastBacktickBefore = beforeText.lastIndexOf('`');
+          const firstBacktickAfter = afterText.indexOf('`');
+          
+          // Check if there's a backtick before and after, and no other backticks between them
+          return lastBacktickBefore !== -1 && 
+                 firstBacktickAfter !== -1 && 
+                 beforeText.substring(lastBacktickBefore + 1).indexOf('`') === -1 &&
+                 afterText.substring(0, firstBacktickAfter).indexOf('`') === -1;
+        })();
+
+        // Check if the number should be rendered as HTML element and is not between backticks
+        if (shouldRenderAsHtmlElement(decimalValue) && !isBetweenBackticks) {
           // This is a numeric value with 9+ significant figures - render with NumericText component
           hasNumericValues = true;
           const numericElement = document.createElement('span');
@@ -78,8 +93,11 @@ export function interpolateStringEnhanced(
 
           fragment.appendChild(numericElement);
         } else {
-          // Render as plain text for numbers with fewer than 9 significant figures
-          fragment.appendChild(document.createTextNode(decimalValue.toString()));
+          // Render as plain text for numbers with fewer than 9 significant figures or between backticks
+          const displayValue = isBetweenBackticks 
+            ? decimalValue.toFixed(8).replace(/\.?0+$/, '') // Remove trailing zeros after decimal
+            : decimalValue.toString();
+          fragment.appendChild(document.createTextNode(displayValue));
         }
       } else if (typeof value === 'string') {
         // String interpolation

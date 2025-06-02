@@ -295,10 +295,6 @@ const evaluateAST = (node: ASTNode, tokenValues: Decimal[], builtInFunctions: Re
       const left = evaluateAST(node.left, tokenValues, builtInFunctions);
       const right = evaluateAST(node.right, tokenValues, builtInFunctions);
 
-      console.log('left', left);
-      console.log('right', right);
-      console.log('node.operator', node.operator);
-
       switch (node.operator) {
         case '+': return left.plus(right);
         case '-': return left.minus(right);
@@ -344,11 +340,6 @@ export function evaluateExpression(expr: string, vars: AugmentedScriptVars, buil
   // Step 2: Parse into AST
   const parser = new Parser(mappedExpression);
   const ast = parser.parse();
-
-  console.log('originalExpression', originalExpression);
-  console.log('mappedExpression', mappedExpression);
-  console.log('tokenValues', tokenValues);
-  console.log('ast', ast);
 
   // Step 3: Evaluate AST with high precision numbers
   if (ast.type === 'Assignment') {

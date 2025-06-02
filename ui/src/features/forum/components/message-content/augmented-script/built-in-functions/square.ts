@@ -4,7 +4,7 @@ import type { BuiltInFunctionSpec } from "../types";
 export const squareFunction: BuiltInFunctionSpec = {
   name: "square",
   handler: (x: Decimal | number) => new Decimal(x).pow(2),
-  description: "Returns x squared, x^2.",
+  description: "Calculates x squared (x^2) for any real number.",
   parameters: [
     {
       name: "x",
@@ -17,20 +17,21 @@ export const squareFunction: BuiltInFunctionSpec = {
   returnDescription: "x squared",
   examples: [
     {
-      title: "Square of 5",
-      code: `@answer = square(5)
-@answer`,
-    },
-    {
-      title: "Square of decimal",
-      code: `@answer = square(2.5)
-@answer`,
-    },
-    {
-      title: "Calculate area of square",
-      code: `@side = 4
-@area = square(@side)
-@area`,
+      title: "Calculate various squares",
+      code: `@pos = 5
+@decimal = 2.5
+@neg = -3
+@zero = 0
+
+@squarePos = square(@pos)
+@squareDecimal = square(@decimal)
+@squareNeg = square(@neg)
+@squareZero = square(@zero)
+
+\`"square(5)" = @squarePos\`
+\`"square(2.5)" = @squareDecimal\`
+\`"square(-3)" = @squareNeg\`
+\`"square(0)" = @squareZero\``,
     },
   ],
 }; 

@@ -174,15 +174,17 @@ const MessageContent: React.FC<MessageContentProps> = ({ content, mode, showSour
 
   return (
     <div className="relative">
-      <div ref={contentRef} className="message-content"></div>
-      {showSourceButton && (
-        <button
-          onClick={() => setShowSource(!showSource)}
-          className="absolute bottom-2 right-2 text-[color:var(--color-text-secondary)] text-sm hover:text-[color:var(--color-text-primary)] transition-colors"
-        >
-          {showSource ? 'Show Rendered' : 'Show Source'}
-        </button>
-      )}
+      <div className="message-content">
+        <div ref={contentRef}></div>
+        {showSourceButton && (
+          <div
+            onClick={() => setShowSource(!showSource)}
+            className="text-[color:var(--color-text-secondary)] text-sm hover:text-[color:var(--color-text-primary)] transition-colors cursor-pointer mt-2"
+          >
+            {showSource ? 'Show Rendered' : 'Show Source'}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

@@ -105,13 +105,13 @@ const _CONSTANTS: Record<string, MathConstant> = {
 
 // Create a proxy that returns just the Decimal values for compatibility
 export const CONSTANTS = new Proxy(_CONSTANTS, {
-  get(target, prop: string) {
+  get(target, prop: string): Decimal | undefined {
     if (prop in target) {
       return target[prop].value;
     }
     return undefined;
   }
-});
+}) as unknown as { [K in keyof typeof _CONSTANTS]: Decimal };
 
 // Create a map for constant identification
 export const CONSTANT_IDENTIFIERS = new Map<string, string>();

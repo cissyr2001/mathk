@@ -17,21 +17,19 @@ export const absFunction: BuiltInFunctionSpec = {
   returnDescription: "The absolute value of x",
   examples: [
     {
-      title: "Absolute value of negative number",
-      code: `@answer = abs(-5)
-@answer`,
-    },
-    {
-      title: "Absolute value of positive number",
-      code: `@answer = abs(3.14)
-@answer`,
-    },
-    {
-      title: "Distance calculation",
-      code: `@point1 = 10
+      title: "Calculate absolute values and distances",
+      code: `@negative = -5
+@positive = 3.14
+@point1 = 10
 @point2 = 15
+
+@absNegative = abs(@negative)
+@absPositive = abs(@positive)
 @distance = abs(@point1 - @point2)
-@distance`,
+
+\`"abs(-5)" = @absNegative\`
+\`"abs(3.14)" = @absPositive\`
+\`Distance between points = @distance\``,
     },
   ],
 }; 

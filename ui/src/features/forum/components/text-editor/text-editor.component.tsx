@@ -10,9 +10,10 @@ type EditorMode = "plain" | "latex" | "html" | "markdown" | "augmented";
 interface TextEditorProps {
   value: string;
   onChange: (value: string, mode: EditorMode) => void;
+  showButtons?: boolean;
 }
 
-const TextEditor: React.FC<TextEditorProps> = ({ value, onChange }) => {
+const TextEditor: React.FC<TextEditorProps> = ({ value, onChange, showButtons = true }) => {
   const [mode, setMode] = useState<EditorMode>(TextBlockPresets.augmented.mode);
   const [showModal, setShowModal] = useState(false);
   const [showMathModal, setShowMathModal] = useState(false);
@@ -144,20 +145,22 @@ const TextEditor: React.FC<TextEditorProps> = ({ value, onChange }) => {
 
   return (
     <div className="mb-4">
-      <div className="flex gap-2 mb-2">
-        <button
-          className="btn btn-default btn-sm"
-          onClick={() => setShowModal(true)}
-        >
-          Add Text Block
-        </button>
-        <button
-          className="btn btn-default btn-sm"
-          onClick={() => setShowMathModal(true)}
-        >
-          Add Math Expression
-        </button>
-      </div>
+      {showButtons && (
+        <div className="flex gap-2 mb-2">
+          <button
+            className="btn btn-default btn-sm"
+            onClick={() => setShowModal(true)}
+          >
+            Add Text Block
+          </button>
+          <button
+            className="btn btn-default btn-sm"
+            onClick={() => setShowMathModal(true)}
+          >
+            Add Math Expression
+          </button>
+        </div>
+      )}
 
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
